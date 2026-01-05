@@ -145,43 +145,11 @@ export default function Home() {
   }
 
   const FlowButtons = () => (
-    <div style={{ marginBottom: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
-      <button
-        onClick={() => {
-          setShowHistory(false);
-          setShowInsights(false);
-          setFlow("onboarding");
-          resetUiState();
-        }}
-      >
-        Onboarding
-      </button>
-      <button
-        onClick={() => {
-          setShowHistory(false);
-          setShowInsights(false);
-          setFlow("daily");
-          resetUiState();
-        }}
-      >
-        Daily
-      </button>
-      <button
-        onClick={() => {
-          setShowHistory((x) => !x);
-          setShowInsights(false);
-        }}
-      >
-        History
-      </button>
-      <button
-        onClick={() => {
-          setShowInsights((x) => !x);
-          setShowHistory(false);
-        }}
-      >
-        Insights
-      </button>
+    <div style={{ marginBottom: 12, display: "flex", gap: 10 }}>
+      <button onClick={() => { setShowHistory(false); setShowInsights(false); setFlow("onboarding"); resetUiState(); }}>Onboarding</button>
+      <button onClick={() => { setShowHistory(false); setShowInsights(false); setFlow("daily"); resetUiState(); }}>Daily</button>
+      <button onClick={() => { setShowHistory((x) => !x); setShowInsights(false); }}>History</button>
+      <button onClick={() => { setShowInsights((x) => !x); setShowHistory(false); }}>Insights</button>
     </div>
   );
 
@@ -190,23 +158,16 @@ export default function Home() {
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
         <h1>History</h1>
         <FlowButtons />
-        {historyLoading ? (
-          <p>Loading…</p>
-        ) : historyItems.length === 0 ? (
-          <p>No past sessions.</p>
-        ) : (
+        {historyLoading ? <p>Loading…</p> : historyItems.length === 0 ? <p>No past sessions.</p> :
           historyItems.map((h) => (
-            <div
-              key={h.id}
-              style={{ marginBottom: 12, padding: 10, border: "1px solid #333", borderRadius: 8 }}
-            >
+            <div key={h.id} style={{ marginBottom: 12, padding: 10, border: "1px solid #333", borderRadius: 8 }}>
               <div style={{ opacity: 0.7, fontSize: 12 }}>
                 {h.flow} — {h.updatedAt ? new Date(h.updatedAt._seconds * 1000).toLocaleDateString() : ""}
               </div>
               <div style={{ fontSize: 14 }}>Answers: {h.answersCount}</div>
             </div>
           ))
-        )}
+        }
       </main>
     );
   }
@@ -237,7 +198,7 @@ export default function Home() {
 
   if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
 
-  if (finished) {
+    if (finished) {
     const answered = items
       .map((it) => ({ item: it, answer: (answers[it.id] || "").trim() }))
       .filter((x) => x.answer.length > 0);
@@ -247,11 +208,10 @@ export default function Home() {
         <h1>Thank you 🤍</h1>
         <FlowButtons />
 
-        {/* Summary */}
         {answered.length > 0 && (
           <div style={{ marginTop: 16, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
-            <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 10 }}>
-              Summary (saved)
+            <div style={{ fontSize: 12, opacity: 0.65, marginBottom: 10 }}>
+              We’ll keep this gently in mind.
             </div>
 
             {answered.map(({ item, answer }) => (
@@ -263,28 +223,26 @@ export default function Home() {
           </div>
         )}
 
-        {/* Delete notice */}
         {deleteNotice && (
           <p style={{ marginTop: 12, opacity: 0.85 }}>
             {deleteNotice}
           </p>
         )}
 
-        {/* Actions */}
-        <div style={{ marginTop: 16, display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-          <button
-            onClick={() => {
-              setDeleteNotice(null);
-              resetUiState();
-            }}
-          >
+        <div style={{ marginTop: 16, display: "flex", gap: 10, alignItems: "center" }}>
+          <button onClick={() => { setDeleteNotice(null); resetUiState(); }}>
             Start again
           </button>
 
           <button
             onClick={handleDeleteMyData}
             disabled={deletePending}
-            style={{ opacity: deletePending ? 0.6 : 1 }}
+            style={{
+              opacity: deletePending ? 0.5 : 0.6,
+              background: "transparent",
+              border: "1px solid #333",
+              color: "#ddd",
+            }}
           >
             {deletePending ? "Deleting…" : "Delete my data"}
           </button>
@@ -292,6 +250,7 @@ export default function Home() {
       </main>
     );
   }
+
 
   const current = items[i];
   const isLast = i >= items.length - 1;
@@ -310,21 +269,19 @@ export default function Home() {
       )}
 
       <div style={{ marginBottom: 16 }}>
-        <div>{current?.title}</div>
-        <div>{current?.content}</div>
+        <div>{current.title}</div>
+        <div>{current.content}</div>
       </div>
 
       <textarea
         ref={textareaRef}
-        value={answers[current?.id || ""] || ""}
+        value={answers[current.id] || ""}
         onChange={(e) => setAnswers({ ...answers, [current.id]: e.target.value })}
         style={{ width: "100%", minHeight: 80 }}
       />
 
       <div style={{ display: "flex", gap: 10 }}>
-        <button onClick={() => setI((x) => Math.max(0, x - 1))} disabled={i === 0}>
-          Back
-        </button>
+        <button onClick={() => setI((x) => Math.max(0, x - 1))} disabled={i === 0}>Back</button>
         <button
           onClick={async () => {
             const answer = answers[current.id];
@@ -332,14 +289,7 @@ export default function Home() {
               await fetch("/api/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  sessionId,
-                  userId,
-                  flow,
-                  step: current.step,
-                  contentId: current.id,
-                  answer,
-                }),
+                body: JSON.stringify({ sessionId, userId, flow, step: current.step, contentId: current.id, answer }),
               });
             }
             if (isLast) setFinished(true);
