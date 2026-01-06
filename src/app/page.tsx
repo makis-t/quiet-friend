@@ -303,17 +303,18 @@ export default function Home() {
               Start fresh
             </button>
           ) : (
-            <button
-              onClick={handleDeleteMyData}
-              disabled={deletePending}
-              style={{
-                opacity: deletePending ? 0.55 : 0.8,
-                padding: "9px 14px",
-                borderRadius: 10,
-                border: "1px solid rgba(255,255,255,0.35)",
-                background: "transparent",
-              }}
-            >
+         <button
+  onClick={handleDeleteMyData}
+  disabled={deletePending}
+  style={{
+    opacity: deletePending ? 0.5 : 0.7,
+    padding: "5px 10px",
+    borderRadius: 6,
+    border: "1px solid rgba(255,255,255,0.25)",
+    background: "transparent",
+    fontSize: 12,
+  }}
+>
               {deletePending ? "Deleting…" : "Delete my data"}
             </button>
           )}
