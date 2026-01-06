@@ -56,6 +56,7 @@ export default function Home() {
 
   const [deleteNotice, setDeleteNotice] = useState<string | null>(null);
   const [deletePending, setDeletePending] = useState(false);
+  const [didDelete, setDidDelete] = useState(false);
 
   const [showHistory, setShowHistory] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -113,6 +114,8 @@ export default function Home() {
     setI(0);
     setFinished(false);
     setAnswers({});
+    setDidDelete(false);
+    setDeleteNotice(null);
   }
 
   async function handleDeleteMyData() {
@@ -138,6 +141,7 @@ export default function Home() {
 
       setAnswers({});
       setFinished(true);
+      setDidDelete(true);
       setDeleteNotice("Your data has been deleted.");
     } finally {
       setDeletePending(false);
@@ -146,10 +150,42 @@ export default function Home() {
 
   const FlowButtons = () => (
     <div style={{ marginBottom: 12, display: "flex", gap: 10 }}>
-      <button onClick={() => { setShowHistory(false); setShowInsights(false); setFlow("onboarding"); resetUiState(); }}>Onboarding</button>
-      <button onClick={() => { setShowHistory(false); setShowInsights(false); setFlow("daily"); resetUiState(); }}>Daily</button>
-      <button onClick={() => { setShowHistory((x) => !x); setShowInsights(false); }}>History</button>
-      <button onClick={() => { setShowInsights((x) => !x); setShowHistory(false); }}>Insights</button>
+      <button
+        onClick={() => {
+          setShowHistory(false);
+          setShowInsights(false);
+          setFlow("onboarding");
+          resetUiState();
+        }}
+      >
+        Onboarding
+      </button>
+      <button
+        onClick={() => {
+          setShowHistory(false);
+          setShowInsights(false);
+          setFlow("daily");
+          resetUiState();
+        }}
+      >
+        Daily
+      </button>
+      <button
+        onClick={() => {
+          setShowHistory((x) => !x);
+          setShowInsights(false);
+        }}
+      >
+        History
+      </button>
+      <button
+        onClick={() => {
+          setShowInsights((x) => !x);
+          setShowHistory(false);
+        }}
+      >
+        Insights
+      </button>
     </div>
   );
 
@@ -158,16 +194,29 @@ export default function Home() {
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
         <h1>History</h1>
         <FlowButtons />
-        {historyLoading ? <p>Loading…</p> : historyItems.length === 0 ? <p>No past sessions.</p> :
+        {historyLoading ? (
+          <p>Loading…</p>
+        ) : historyItems.length === 0 ? (
+          <p>No past sessions.</p>
+        ) : (
           historyItems.map((h) => (
-            <div key={h.id} style={{ marginBottom: 12, padding: 10, border: "1px solid #333", borderRadius: 8 }}>
+            <div
+              key={h.id}
+              style={{
+                marginBottom: 12,
+                padding: 10,
+                border: "1px solid #333",
+                borderRadius: 8,
+              }}
+            >
               <div style={{ opacity: 0.7, fontSize: 12 }}>
-                {h.flow} — {h.updatedAt ? new Date(h.updatedAt._seconds * 1000).toLocaleDateString() : ""}
+                {h.flow} —{" "}
+                {h.updatedAt ? new Date(h.updatedAt._seconds * 1000).toLocaleDateString() : ""}
               </div>
               <div style={{ fontSize: 14 }}>Answers: {h.answersCount}</div>
             </div>
           ))
-        }
+        )}
       </main>
     );
   }
@@ -198,9 +247,12 @@ export default function Home() {
 
   if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
 
-    if (finished) {
+  if (finished) {
     const answered = items
-      .map((it) => ({ item: it, answer: (answers[it.id] || "").trim() }))
+      .map((it) => ({
+        item: it,
+        answer: (answers[it.id] || "").trim(),
+      }))
       .filter((x) => x.answer.length > 0);
 
     return (
@@ -208,12 +260,9 @@ export default function Home() {
         <h1>Thank you 🤍</h1>
         <FlowButtons />
 
+        {/* Summary: questions + answers */}
         {answered.length > 0 && (
           <div style={{ marginTop: 16, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
-            <div style={{ fontSize: 12, opacity: 0.65, marginBottom: 10 }}>
-              We’ll keep this gently in mind.
-            </div>
-
             {answered.map(({ item, answer }) => (
               <div key={item.id} style={{ marginBottom: 10 }}>
                 <div style={{ fontSize: 13, opacity: 0.85 }}>{item.title}</div>
@@ -223,34 +272,59 @@ export default function Home() {
           </div>
         )}
 
+        <div style={{ marginTop: 14, fontSize: 13, opacity: 0.7 }}>
+          We’ll keep this gently in mind.
+        </div>
+
+        {/* Delete notice */}
         {deleteNotice && (
           <p style={{ marginTop: 12, opacity: 0.85 }}>
             {deleteNotice}
           </p>
         )}
 
+        {/* Actions */}
         <div style={{ marginTop: 16, display: "flex", gap: 10, alignItems: "center" }}>
-          <button onClick={() => { setDeleteNotice(null); resetUiState(); }}>
-            Start again
-          </button>
+          {/* Start fresh appears ONLY after successful delete */}
+          {didDelete ? (
+            <button
+              onClick={() => {
+                setFlow("onboarding");
+                resetUiState();
+              }}
+              style={{
+                borderRadius: 10,
+                padding: "9px 14px",
+                border: "1px solid rgba(255,255,255,0.18)",
+                background: "transparent",
+                opacity: 0.85,
+              }}
+            >
+              Start fresh
+            </button>
+          ) : (
+            <button
+              onClick={handleDeleteMyData}
+              disabled={deletePending}
+              style={{
+                opacity: deletePending ? 0.55 : 0.8,
+                padding: "9px 14px",
+                borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.35)",
+                background: "transparent",
+              }}
+            >
+              {deletePending ? "Deleting…" : "Delete my data"}
+            </button>
+          )}
+        </div>
 
-          <button
-            onClick={handleDeleteMyData}
-            disabled={deletePending}
-            style={{
-              opacity: deletePending ? 0.5 : 0.6,
-              background: "transparent",
-              border: "1px solid #333",
-              color: "#ddd",
-            }}
-          >
-            {deletePending ? "Deleting…" : "Delete my data"}
-          </button>
+        <div style={{ marginTop: 16, opacity: 0.75 }}>
+          You can come back anytime.
         </div>
       </main>
     );
   }
-
 
   const current = items[i];
   const isLast = i >= items.length - 1;
@@ -262,9 +336,7 @@ export default function Home() {
 
       {i === 0 && (
         <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
-          {flow === "daily"
-            ? `Today — ${new Date().toLocaleDateString()}`
-            : "Welcome"}
+          {flow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
         </div>
       )}
 
@@ -281,7 +353,9 @@ export default function Home() {
       />
 
       <div style={{ display: "flex", gap: 10 }}>
-        <button onClick={() => setI((x) => Math.max(0, x - 1))} disabled={i === 0}>Back</button>
+        <button onClick={() => setI((x) => Math.max(0, x - 1))} disabled={i === 0}>
+          Back
+        </button>
         <button
           onClick={async () => {
             const answer = answers[current.id];
