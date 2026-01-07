@@ -324,16 +324,23 @@ export default function Home() {
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
       <h1>Quiet Friend</h1>
       <FlowButtons />
+      {/* Progress indicator */}
+      <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
+        {items.length ? `${i + 1}/${items.length}` : ""}
+      </div>
 
       {i === 0 && (
         <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
           {flow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
         </div>
       )}
-
-      <div style={{ marginBottom: 16 }}>
-        <div>{current.title}</div>
-        <div>{current.content}</div>
+          <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 10 }}>
+          {current.title}
+        </div>
+        <div style={{ fontSize: 18, lineHeight: 1.5, opacity: 0.9 }}>
+          {current.content}
+        </div>
       </div>
 
       <textarea
