@@ -343,12 +343,16 @@ export default function Home() {
         </div>
       </div>
 
-
       <textarea
         ref={textareaRef}
+        autoFocus
         value={answers[current.id] || ""}
         onChange={(e) => setAnswers({ ...answers, [current.id]: e.target.value })}
-        style={{ width: "100%", minHeight: 80 }}
+        style={{
+          width: "100%",
+          minHeight: 80,
+          caretColor: "#ffffff",
+        }}
       />
 
       <div style={{ display: "flex", gap: 10 }}>
