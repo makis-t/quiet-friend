@@ -283,18 +283,37 @@ export default function Home() {
 
         {deleteNotice && <p style={{ marginTop: 10, opacity: 0.9 }}>{deleteNotice}</p>}
 
-        <div style={{ marginTop: 10 }}>
-          <button
-            style={{
-              ...buttonStyle,
-              opacity: deletePending ? 0.55 : 0.85,
-            }}
-            onClick={handleDeleteMyData}
-            disabled={deletePending}
-          >
-            {deletePending ? "Deleting…" : "Delete my data"}
-          </button>
-        </div>
+ <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
+  {/* Δείξε Delete μόνο όταν ΔΕΝ υπάρχει μήνυμα (ούτε success ούτε error) */}
+  {!deleteNotice && (
+    <button
+      style={{
+        ...buttonStyle,
+        opacity: deletePending ? 0.55 : 0.85,
+      }}
+      onClick={handleDeleteMyData}
+      disabled={deletePending}
+    >
+      {deletePending ? "Deleting…" : "Delete my data"}
+    </button>
+  )}
+
+  {/* Αν έγινε success delete -> δείξε Start fresh */}
+  {deleteNotice === "Your data has been deleted." && (
+    <button
+      style={buttonStyle}
+      onClick={() => {
+        resetUiState();
+        setDeleteNotice(null);
+        setFlow("onboarding");
+      }}
+    >
+      Start fresh
+    </button>
+  )}
+</div>
+
+
 
         <p style={{ marginTop: 18, opacity: 0.85 }}>You can come back anytime.</p>
       </main>
