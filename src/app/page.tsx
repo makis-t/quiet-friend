@@ -168,11 +168,17 @@ export default function Home() {
     lineHeight: 1,
     opacity: 0.9,
   };
+  const activeButtonStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.10)",
+    border: "1px solid rgba(255,255,255,0.55)",
+    opacity: 1,
+  };
 
   const FlowButtons = () => (
     <div style={{ marginBottom: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
       <button
-        style={buttonStyle}
+       style={{ ...buttonStyle, ...(flow === "onboarding" ? activeButtonStyle : {}) }}
+
         onClick={() => {
           setShowHistory(false);
           setShowInsights(false);
@@ -184,7 +190,8 @@ export default function Home() {
       </button>
 
       <button
-        style={buttonStyle}
+       style={{ ...buttonStyle, ...(flow === "daily" ? activeButtonStyle : {}) }}
+
         onClick={() => {
           setShowHistory(false);
           setShowInsights(false);
@@ -196,7 +203,7 @@ export default function Home() {
       </button>
 
       <button
-        style={buttonStyle}
+           style={{ ...buttonStyle, ...(showHistory ? activeButtonStyle : {}) }}
         onClick={() => {
           setShowHistory((x) => !x);
           setShowInsights(false);
@@ -206,7 +213,7 @@ export default function Home() {
       </button>
 
       <button
-        style={buttonStyle}
+           style={{ ...buttonStyle, ...(showInsights ? activeButtonStyle : {}) }}
         onClick={() => {
           setShowInsights((x) => !x);
           setShowHistory(false);
