@@ -282,10 +282,8 @@ export default function Home() {
         <p style={{ marginTop: 14, opacity: 0.85 }}>We’ll keep this gently in mind.</p>
 
         {deleteNotice && <p style={{ marginTop: 10, opacity: 0.9 }}>{deleteNotice}</p>}
-
- <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
-  {/* Δείξε Delete μόνο όταν ΔΕΝ υπάρχει μήνυμα (ούτε success ούτε error) */}
-  {!deleteNotice && (
+{deleteNotice === null && (
+  <div style={{ marginTop: 10 }}>
     <button
       style={{
         ...buttonStyle,
@@ -296,10 +294,11 @@ export default function Home() {
     >
       {deletePending ? "Deleting…" : "Delete my data"}
     </button>
-  )}
+  </div>
+)}
 
-  {/* Αν έγινε success delete -> δείξε Start fresh */}
-  {deleteNotice === "Your data has been deleted." && (
+{deleteNotice === "Your data has been deleted." && (
+  <div style={{ marginTop: 10 }}>
     <button
       style={buttonStyle}
       onClick={() => {
@@ -310,10 +309,8 @@ export default function Home() {
     >
       Start fresh
     </button>
-  )}
-</div>
-
-
+  </div>
+)}
 
         <p style={{ marginTop: 18, opacity: 0.85 }}>You can come back anytime.</p>
       </main>
