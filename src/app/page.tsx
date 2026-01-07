@@ -104,10 +104,22 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showHistory, showInsights]);
 
-  useEffect(() => {
-    const t = setTimeout(() => textareaRef.current?.focus(), 0);
+   useEffect(() => {
+    const t = setTimeout(() => {
+      const el = textareaRef.current;
+      if (!el) return;
+
+      // force focus + visible caret
+      el.focus();
+      const v = el.value || "";
+      try {
+        el.setSelectionRange(v.length, v.length);
+      } catch {}
+    }, 0);
+
     return () => clearTimeout(t);
   }, [i, loading]);
+
 
   function resetUiState() {
     setSessionId(crypto.randomUUID());
