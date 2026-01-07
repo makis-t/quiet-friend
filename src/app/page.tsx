@@ -334,14 +334,15 @@ export default function Home() {
           {flow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
         </div>
       )}
-          <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 10 }}>
+              <div style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, lineHeight: 1.2 }}>
           {current.title}
         </div>
         <div style={{ fontSize: 18, lineHeight: 1.5, opacity: 0.9 }}>
           {current.content}
         </div>
       </div>
+
 
       <textarea
         ref={textareaRef}
