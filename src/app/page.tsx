@@ -67,6 +67,8 @@ export default function Home() {
   const [showInsights, setShowInsights] = useState(false);
   const [insightsLoading, setInsightsLoading] = useState(false);
   const [insights, setInsights] = useState<Insights | null>(null);
+const [showWeekly, setShowWeekly] = useState(false);
+
 
   useEffect(() => {
     setUserId(getOrCreateUserId());
@@ -83,14 +85,28 @@ export default function Home() {
     load();
   }, [flow]);
 
-  async function loadHistory() {
-    if (!userId) return;
-    setHistoryLoading(true);
-    const res = await fetch(`/api/history?userId=${userId}&limit=20`);
-    const data = await res.json();
-    setHistoryItems(data.items || []);
-    setHistoryLoading(false);
+ async function loadHistory() {
+  if (!userId) return;
+  setHistoryLoading(true);
+  const res = await fetch(`/api/history?userId=${userId}&limit=50`);
+  const data = await res.json();
+  const items = data.items || [];
+  setHistoryItems(items);
+
+  if (items.length > 0) {
+    const oldest = items[items.length - 1];
+    if (oldest.updatedAt?._seconds) {
+      const firstDate = new Date(oldest.updatedAt._seconds * 1000);
+      const days = (Date.now() - firstDate.getTime()) / (1000 * 60 * 60 * 24);
+      if (days >= 7) {
+        setShowWeekly(true);
+      }
+    }
   }
+
+  setHistoryLoading(false);
+}
+
 
   async function loadInsights() {
     if (!userId) return;
@@ -130,6 +146,7 @@ export default function Home() {
     setFinished(false);
     setAnswers({});
     setDeleteNotice(null);
+  setShowWeekly(false);
   }
 
   async function handleDeleteMyData() {
