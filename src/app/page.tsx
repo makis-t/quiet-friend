@@ -355,17 +355,24 @@ export default function Home() {
         </div>
       </div>
 
-      <textarea
+        <textarea
         ref={textareaRef}
         autoFocus
         value={answers[current.id] || ""}
         onChange={(e) => setAnswers({ ...answers, [current.id]: e.target.value })}
         style={{
           width: "100%",
-          minHeight: 80,
-          caretColor: "#ffffff",
+          minHeight: 90,
+          padding: "10px 12px",
+          background: "rgba(255,255,255,0.06)",
+          border: "1px solid rgba(255,255,255,0.25)",
+          borderRadius: 8,
+          color: "#fff",
+          caretColor: "#fff",
+          outline: "none",
         }}
       />
+
 
       <div style={{ display: "flex", gap: 10 }}>
         <button onClick={() => setI((x) => Math.max(0, x - 1))} disabled={i === 0}>
