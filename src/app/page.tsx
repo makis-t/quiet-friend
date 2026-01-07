@@ -177,7 +177,7 @@ export default function Home() {
   const FlowButtons = () => (
     <div style={{ marginBottom: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
       <button
-       style={{ ...buttonStyle, ...(flow === "onboarding" ? activeButtonStyle : {}) }}
+            style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "onboarding" ? activeButtonStyle : {}) }}
 
         onClick={() => {
           setShowHistory(false);
@@ -190,7 +190,7 @@ export default function Home() {
       </button>
 
       <button
-       style={{ ...buttonStyle, ...(flow === "daily" ? activeButtonStyle : {}) }}
+             style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
 
         onClick={() => {
           setShowHistory(false);
