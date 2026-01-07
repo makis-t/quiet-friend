@@ -107,8 +107,7 @@ const [showWeekly, setShowWeekly] = useState(false);
   setHistoryLoading(false);
 }
 
-
-  async function loadInsights() {
+ async function loadInsights() {
     if (!userId) return;
     setInsightsLoading(true);
     const res = await fetch(`/api/insights?userId=${userId}`);
@@ -117,11 +116,12 @@ const [showWeekly, setShowWeekly] = useState(false);
     setInsightsLoading(false);
   }
 
-  useEffect(() => {
-    if (showHistory) loadHistory();
-    if (showInsights) loadInsights();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showHistory, showInsights]);
+ useEffect(() => {
+  if (showHistory || flow === "daily") loadHistory();
+  if (showInsights) loadInsights();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [showHistory, showInsights, flow]);
+
 
    useEffect(() => {
     const t = setTimeout(() => {
