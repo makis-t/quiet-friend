@@ -98,7 +98,7 @@ const [showWeekly, setShowWeekly] = useState(false);
     if (oldest.updatedAt?._seconds) {
       const firstDate = new Date(oldest.updatedAt._seconds * 1000);
       const days = (Date.now() - firstDate.getTime()) / (1000 * 60 * 60 * 24);
-      if (days >= 7) {
+           if (true) {
         setShowWeekly(true);
       }
     }
