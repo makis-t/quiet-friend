@@ -30,6 +30,9 @@ type Insights = {
 };
 
 const USER_KEY = "quietFriendUserId";
+const DAILY_CLOSING_END = "That’s enough for today.";
+const DAILY_CLOSING_CONTINUITY = "We’ll gently continue tomorrow.";
+
 
 function createNewUserId() {
   const id = crypto.randomUUID();
@@ -298,7 +301,15 @@ export default function Home() {
           </div>
         )}
 
-        <p style={{ marginTop: 14, opacity: 0.85 }}>We’ll keep this gently in mind.</p>
+  {flow === "daily" ? (
+  <div style={{ marginTop: 14, opacity: 0.85 }}>
+    <p style={{ margin: 0 }}>{DAILY_CLOSING_END}</p>
+    <p style={{ margin: 0 }}>{DAILY_CLOSING_CONTINUITY}</p>
+  </div>
+) : (
+  <p style={{ marginTop: 14, opacity: 0.85 }}>We’ll keep this gently in mind.</p>
+)}
+
 
         {deleteNotice && <p style={{ marginTop: 10, opacity: 0.9 }}>{deleteNotice}</p>}
 {deleteNotice === null && (
