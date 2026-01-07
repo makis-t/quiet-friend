@@ -270,6 +270,32 @@ const [showWeekly, setShowWeekly] = useState(false);
     );
   }
 
+  if (showWeekly) {
+    return (
+      <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+        <h1 style={{ marginBottom: 12 }}>Weekly Reflection</h1>
+        <FlowButtons />
+        <p style={{ opacity: 0.85, lineHeight: 1.6 }}>
+          This week, you wrote a little about what matters to you.
+        </p>
+        <p style={{ opacity: 0.7 }}>
+          There is nothing to fix here — just something to notice.
+        </p>
+        <button
+          style={{ marginTop: 20 }}
+          onClick={() => {
+            setShowWeekly(false);
+            setFlow("daily");
+            resetUiState();
+          }}
+        >
+          Continue
+        </button>
+      </main>
+    );
+  }
+
+
   if (showInsights) {
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
