@@ -1,19 +1,13 @@
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
-import fs from "fs";
 
 function getAdminApp() {
   if (admin.apps.length > 0) return admin.app();
 
-  // Uses the same local file as delete-user:
-  // /Users/trips/quiet-friend/web/firebase-admin-key.json
-  const keyPath = `${process.cwd()}/firebase-admin-key.json`;
+  const raw = process.env.FIREBASE_ADMIN_KEY;
+  if (!raw) throw new Error("Missing FIREBASE_ADMIN_KEY env var");
 
-  if (!fs.existsSync(keyPath)) {
-    throw new Error(`Missing firebase-admin-key.json at: ${keyPath}`);
-  }
-
-  const serviceAccount = JSON.parse(fs.readFileSync(keyPath, "utf8"));
+  const serviceAccount = JSON.parse(raw);
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -21,6 +15,7 @@ function getAdminApp() {
 
   return admin.app();
 }
+
 
 export async function GET(req: Request) {
   try {
