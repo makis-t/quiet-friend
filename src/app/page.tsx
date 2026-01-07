@@ -342,7 +342,10 @@ export default function Home() {
   </div>
 )}
 
-        <p style={{ marginTop: 18, opacity: 0.85 }}>You can come back anytime.</p>
+       {flow !== "daily" && (
+  <p style={{ marginTop: 18, opacity: 0.85 }}>You can come back anytime.</p>
+)}
+
       </main>
     );
   }
