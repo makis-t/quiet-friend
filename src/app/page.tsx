@@ -277,7 +277,7 @@ export default function Home() {
 
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-            <h1 style={{ marginBottom: 12 }}>Thank you 🤍</h1>
+            <h1 style={{ marginBottom: 8 }}>Thank you 🤍</h1>
         <FlowButtons />
 
         {answered.length > 0 && (
@@ -334,7 +334,7 @@ export default function Home() {
 
   return (
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-          <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
+          <h1 style={{ marginBottom: 8 }}>Quiet Friend</h1>
       <FlowButtons />
       {/* Progress indicator */}
       <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
