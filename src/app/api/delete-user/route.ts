@@ -5,20 +5,13 @@ import admin from "firebase-admin";
 
 function getAdminDb() {
   if (!admin.apps.length) {
-    const projectId = process.env.FIREBASE_PROJECT_ID;
-    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-    const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+     const raw = process.env.FIREBASE_ADMIN_KEY;
+    if (!raw) throw new Error("Missing FIREBASE_ADMIN_KEY env var");
 
-    if (!projectId || !clientEmail || !privateKey) {
-      throw new Error("Missing Firebase Admin env vars");
-    }
+    const serviceAccount = JSON.parse(raw);
 
     admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId,
-        clientEmail,
-        privateKey,
-      }),
+      credential: admin.credential.cert(serviceAccount),
     });
   }
 
