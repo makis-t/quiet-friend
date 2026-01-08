@@ -65,10 +65,22 @@ export default function Home() {
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
 
   const [showInsights, setShowInsights] = useState(false);
+const [dailyCount, setDailyCount] = useState<number | null>(null);
+
   const [insightsLoading, setInsightsLoading] = useState(false);
   const [insights, setInsights] = useState<Insights | null>(null);
 const [showWeekly, setShowWeekly] = useState(false);
+const [recentAnswers, setRecentAnswers] = useState<string[]>([]);
 
+
+const mostFrequentWord = (() => {
+  const text = recentAnswers.join(" ").toLowerCase();
+  const words = text.match(/\b[a-z]{3,}\b/g) || [];
+  const counts: Record<string, number> = {};
+  words.forEach((w) => (counts[w] = (counts[w] || 0) + 1));
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  return sorted.length ? sorted[0][0] : null;
+})();
 
   useEffect(() => {
     setUserId(getOrCreateUserId());
@@ -85,9 +97,10 @@ const [showWeekly, setShowWeekly] = useState(false);
     load();
   }, [flow]);
 
- async function loadHistory() {
+async function loadHistory() {
   if (!userId) return;
   setHistoryLoading(true);
+
   const res = await fetch(`/api/history?userId=${userId}&limit=50`);
   const data = await res.json();
   const items = data.items || [];
@@ -98,9 +111,10 @@ const [showWeekly, setShowWeekly] = useState(false);
     if (oldest.updatedAt?._seconds) {
       const firstDate = new Date(oldest.updatedAt._seconds * 1000);
       const days = (Date.now() - firstDate.getTime()) / (1000 * 60 * 60 * 24);
-        if (days >= 7) {
-  setShowWeekly(true);
-}
+      if (days >= 7) {
+        setShowWeekly(true);
+      }
+    }
   }
 
   setHistoryLoading(false);
@@ -115,11 +129,28 @@ const [showWeekly, setShowWeekly] = useState(false);
     setInsightsLoading(false);
   }
 
- useEffect(() => {
+async function loadDailyCount() {
+  if (!userId) return;
+  const res = await fetch(`/api/insights?userId=${userId}`);
+  const data = await res.json();
+  if (typeof data?.dailySessions === "number") {
+    setDailyCount(data.dailySessions);
+  }
+}
+
+
+useEffect(() => {
   if (showHistory || flow === "daily") loadHistory();
   if (showInsights) loadInsights();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [showHistory, showInsights, flow]);
+  if (flow === "daily") loadDailyCount();
+
+  if (showWeekly && userId) {
+    fetch(`/api/answers?userId=${userId}`)
+      .then((r) => r.json())
+      .then((d) => setRecentAnswers(d.answers || []));
+  }
+}, [showHistory, showInsights, flow, showWeekly, userId]);
+
 
 
    useEffect(() => {
@@ -146,6 +177,7 @@ const [showWeekly, setShowWeekly] = useState(false);
     setAnswers({});
     setDeleteNotice(null);
   setShowWeekly(false);
+  setRecentAnswers([]);
   }
 
   async function handleDeleteMyData() {
@@ -280,6 +312,11 @@ const [showWeekly, setShowWeekly] = useState(false);
         <p style={{ opacity: 0.7 }}>
           There is nothing to fix here — just something to notice.
         </p>
+{mostFrequentWord && (
+  <p style={{ marginTop: 14, opacity: 0.85 }}>
+    One word that keeps showing up: <b>{mostFrequentWord}</b>.
+  </p>
+)}
         <button
           style={{ marginTop: 20 }}
           onClick={() => {
@@ -404,11 +441,20 @@ const [showWeekly, setShowWeekly] = useState(false);
         {items.length ? `${i + 1}/${items.length}` : ""}
       </div>
 
-      {i === 0 && (
-        <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
-          {flow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
-        </div>
-      )}
+   {i === 0 && (
+  <>
+    <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
+      {flow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
+    </div>
+
+    {flow === "daily" && typeof dailyCount === "number" && (
+      <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 10 }}>
+        You’ve shown up {dailyCount} times.
+      </div>
+    )}
+  </>
+)}
+
               <div style={{ marginBottom: 14 }}>
         <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, lineHeight: 1.2 }}>
           {current.title}
