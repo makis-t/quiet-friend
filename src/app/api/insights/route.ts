@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
-import fs from "fs";
 
 function getAdminApp() {
   if (admin.apps.length > 0) return admin.app();
 
-  const keyPath = `${process.cwd()}/firebase-admin-key.json`;
-  if (!fs.existsSync(keyPath)) {
-    throw new Error(`Missing firebase-admin-key.json at: ${keyPath}`);
-  }
+  const raw = process.env.FIREBASE_ADMIN_KEY;
+  if (!raw) throw new Error("Missing FIREBASE_ADMIN_KEY env var");
 
-  const serviceAccount = JSON.parse(fs.readFileSync(keyPath, "utf8"));
-  admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  const serviceAccount = JSON.parse(raw);
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
 
   return admin.app();
 }
@@ -33,7 +33,6 @@ export async function GET(req: Request) {
     const app = getAdminApp();
     const db = app.firestore();
 
-    // IMPORTANT: orderBy helps stability + matches existing index you created
     const snap = await db
       .collection("sessionSummaries")
       .where("userId", "==", userId)
@@ -64,7 +63,7 @@ export async function GET(req: Request) {
       const dt = toDateFromSeconds(seconds || undefined);
 
       if (dt) {
-        const dayKey = dt.toISOString().slice(0, 10); // YYYY-MM-DD
+        const dayKey = dt.toISOString().slice(0, 10);
         dayBuckets[dayKey] = (dayBuckets[dayKey] || 0) + 1;
 
         if (dt >= sevenDaysAgo) last7DaysSessions += 1;
