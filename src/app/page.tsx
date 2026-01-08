@@ -178,36 +178,39 @@ useEffect(() => {
     setDeleteNotice(null);
   setShowWeekly(false);
   setRecentAnswers([]);
+setDailyCount(null);
   }
 
-  async function handleDeleteMyData() {
-    if (!userId || deletePending) return;
+ async function handleDeleteMyData() {
+  if (!userId || deletePending) return;
 
-    try {
-      setDeletePending(true);
+  try {
+    setDeletePending(true);
 
-      const res = await fetch("/api/delete-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
+    const res = await fetch("/api/delete-user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
 
-      if (!res.ok) {
-        setDeleteNotice("Something went wrong. Please try again.");
-        return;
-      }
-
-      localStorage.removeItem(USER_KEY);
-      const newId = createNewUserId();
-      setUserId(newId);
-
-      setAnswers({});
-      setFinished(true);
-      setDeleteNotice("Your data has been deleted.");
-    } finally {
-      setDeletePending(false);
+    if (!res.ok) {
+      setDeleteNotice("Something went wrong. Please try again.");
+      return;
     }
+
+    localStorage.removeItem(USER_KEY);
+    const newId = createNewUserId();
+    setUserId(newId);
+    setDailyCount(null);
+
+    setAnswers({});
+    setFinished(true);
+    setDeleteNotice("Your data has been deleted.");
+  } finally {
+    setDeletePending(false);
   }
+}
+
 
   // ✅ One unified button look (so Delete matches the top buttons)
   const buttonStyle: React.CSSProperties = {
@@ -371,12 +374,19 @@ useEffect(() => {
 
         {answered.length > 0 && (
           <div style={{ padding: 12, border: "1px solid #333", borderRadius: 10 }}>
-            {answered.map(({ item, answer }) => (
-              <div key={item.id} style={{ marginBottom: 12 }}>
-                <div style={{ opacity: 0.9 }}>{item.title}</div>
-                <div style={{ whiteSpace: "pre-wrap", opacity: 0.95 }}>{answer}</div>
-              </div>
-            ))}
+          {answered.map(({ item, answer }) => (
+  <div key={item.id} style={{ marginBottom: 14 }}>
+    <div style={{ fontSize: 13, opacity: 0.6, marginBottom: 2 }}>
+      A quiet note:
+    </div>
+    <div style={{ fontSize: 15, opacity: 0.9, marginBottom: 4 }}>
+      {item.title}
+    </div>
+    <div style={{ whiteSpace: "pre-wrap", opacity: 0.95 }}>
+      {answer}
+    </div>
+  </div>
+))}
           </div>
         )}
 
