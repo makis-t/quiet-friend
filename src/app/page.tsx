@@ -75,7 +75,7 @@ const [recentAnswers, setRecentAnswers] = useState<string[]>([]);
 
 const mostFrequentWord = (() => {
   const text = recentAnswers.join(" ").toLowerCase();
-  const words = text.match(/\b[a-z]{3,}\b/g) || [];
+const words = text.match(/\b[\p{L}]{3,}\b/gu) || [];
   const counts: Record<string, number> = {};
   words.forEach((w) => (counts[w] = (counts[w] || 0) + 1));
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
