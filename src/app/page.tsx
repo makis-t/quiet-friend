@@ -66,21 +66,17 @@ export default function Home() {
 
   const [showInsights, setShowInsights] = useState(false);
 const [dailyCount, setDailyCount] = useState<number | null>(null);
+const [showCalmness, setShowCalmness] = useState(false);
+const [calmness, setCalmness] = useState<number | null>(null);
+
+const [weeklyData, setWeeklyData] = useState<any>(null);
+const [weeklyLoading, setWeeklyLoading] = useState(false);
 
   const [insightsLoading, setInsightsLoading] = useState(false);
   const [insights, setInsights] = useState<Insights | null>(null);
 const [showWeekly, setShowWeekly] = useState(false);
-const [recentAnswers, setRecentAnswers] = useState<string[]>([]);
 
 
-const mostFrequentWord = (() => {
-  const text = recentAnswers.join(" ").toLowerCase();
-const words = text.match(/\b[\p{L}]{3,}\b/gu) || [];
-  const counts: Record<string, number> = {};
-  words.forEach((w) => (counts[w] = (counts[w] || 0) + 1));
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  return sorted.length ? sorted[0][0] : null;
-})();
 
   useEffect(() => {
     setUserId(getOrCreateUserId());
@@ -144,11 +140,14 @@ useEffect(() => {
   if (showInsights) loadInsights();
   if (flow === "daily") loadDailyCount();
 
-  if (showWeekly && userId) {
-    fetch(`/api/answers?userId=${userId}`)
-      .then((r) => r.json())
-      .then((d) => setRecentAnswers(d.answers || []));
-  }
+ if (showWeekly && userId) {
+  setWeeklyLoading(true);
+  fetch(`/api/weekly?userId=${userId}`)
+    .then((r) => r.json())
+    .then((d) => setWeeklyData(d))
+    .finally(() => setWeeklyLoading(false));
+}
+
 }, [showHistory, showInsights, flow, showWeekly, userId]);
 
 
@@ -179,6 +178,11 @@ useEffect(() => {
   setShowWeekly(false);
   setRecentAnswers([]);
 setDailyCount(null);
+
+  setShowCalmness(false);
+  setCalmness(null);
+  setWeeklyData(null);
+  setWeeklyLoading(false);
   }
 
  async function handleDeleteMyData() {
@@ -315,11 +319,31 @@ setDailyCount(null);
         <p style={{ opacity: 0.7 }}>
           There is nothing to fix here — just something to notice.
         </p>
-{mostFrequentWord && (
+{weeklyLoading ? (
+  <p style={{ opacity: 0.7 }}>Loading…</p>
+) : weeklyData?.shifted ? (
   <p style={{ marginTop: 14, opacity: 0.85 }}>
-    One word that keeps showing up: <b>{mostFrequentWord}</b>.
+    Something in your language has shifted.
+  </p>
+) : null}
+
+{!weeklyLoading && typeof weeklyData?.calmThisAvg === "number" && (
+  <p style={{ marginTop: 10, opacity: 0.85 }}>
+    Your calmness felt{" "}
+    {typeof weeklyData?.calmPrevAvg === "number"
+      ? weeklyData.calmThisAvg >= weeklyData.calmPrevAvg
+        ? "a little steadier"
+        : "a little less steady"
+      : "present"}{" "}
+    this week
+ {typeof weeklyData?.calmPrevAvg === "number"
+  ? ` (${weeklyData.calmPrevAvg.toFixed(1)} → ${weeklyData.calmThisAvg.toFixed(1)}).`
+  : ` (${weeklyData.calmThisAvg.toFixed(1)}).`}
+
+
   </p>
 )}
+
         <button
           style={{ marginTop: 20 }}
           onClick={() => {
@@ -359,7 +383,57 @@ setDailyCount(null);
     );
   }
 
-  if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
+if (showCalmness) {
+  return (
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
+      <FlowButtons />
+
+      <div style={{ marginTop: 18, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
+        <div style={{ fontSize: 16, opacity: 0.9, marginBottom: 10 }}>
+          Right now, how calm do you feel?
+        </div>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              style={{ ...buttonStyle, ...(calmness === n ? activeButtonStyle : {}) }}
+              onClick={() => setCalmness(n)}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 12 }}>
+          <button
+            style={{ ...buttonStyle, opacity: calmness ? 1 : 0.5 }}
+            disabled={!calmness}
+            onClick={async () => {
+              await fetch("/api/calmness", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId, userId, flow: "daily", calmness }),
+              });
+
+              setShowCalmness(false);
+              setCalmness(null);
+              setFinished(true);
+            }}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+
+
+if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
+
 
   if (finished) {
     // ✅ show Q + A (not step counters)
@@ -498,18 +572,35 @@ setDailyCount(null);
           Back
         </button>
         <button
-          onClick={async () => {
-            const answer = answers[current.id];
-            if (answer?.trim()) {
-              await fetch("/api/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId, userId, flow, step: current.step, contentId: current.id, answer }),
-              });
-            }
-            if (isLast) setFinished(true);
-            else setI((x) => x + 1);
-          }}
+   onClick={async () => {
+  const answer = answers[current.id];
+  if (answer?.trim()) {
+    await fetch("/api/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId,
+        userId,
+        flow,
+        step: current.step,
+        contentId: current.id,
+        answer,
+      }),
+    });
+  }
+
+  if (isLast) {
+  if (flow === "daily") {
+    setFinished(false);        // 👈 πρόσθεσέ το
+    setShowCalmness(true);
+  } else {
+    setFinished(true);
+  }
+} else {
+  setI((x) => x + 1);
+}
+
+}}
         >
           {isLast ? "Done" : "Continue"}
         </button>
