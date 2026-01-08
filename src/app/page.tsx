@@ -176,7 +176,6 @@ useEffect(() => {
     setAnswers({});
     setDeleteNotice(null);
   setShowWeekly(false);
-  setRecentAnswers([]);
 setDailyCount(null);
 
   setShowCalmness(false);
