@@ -107,9 +107,10 @@ async function loadHistory() {
     if (oldest.updatedAt?._seconds) {
       const firstDate = new Date(oldest.updatedAt._seconds * 1000);
       const days = (Date.now() - firstDate.getTime()) / (1000 * 60 * 60 * 24);
-      if (days >= 0) {
-        setShowWeekly(true);
-      }
+    if (days >= 7 || new URLSearchParams(window.location.search).get("weekly") === "1") {
+  setShowWeekly(true);
+}
+
     }
   }
 
