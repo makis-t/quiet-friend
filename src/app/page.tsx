@@ -308,6 +308,54 @@ setDailyCount(null);
     );
   }
 
+if (showCalmness) {
+  return (
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
+      <FlowButtons />
+
+      <div style={{ marginTop: 18, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
+        <div style={{ fontSize: 16, opacity: 0.9, marginBottom: 10 }}>
+          Right now, how calm do you feel?
+        </div>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              style={{ ...buttonStyle, ...(calmness === n ? activeButtonStyle : {}) }}
+              onClick={() => setCalmness(n)}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 12 }}>
+          <button
+            style={{ ...buttonStyle, opacity: calmness ? 1 : 0.5 }}
+            disabled={!calmness}
+            onClick={async () => {
+              await fetch("/api/calmness", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId, userId, flow: "daily", calmness }),
+              });
+
+              setShowCalmness(false);
+              setCalmness(null);
+              setFinished(true);
+            }}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+
   if (showWeekly) {
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
@@ -382,54 +430,6 @@ setDailyCount(null);
       </main>
     );
   }
-
-if (showCalmness) {
-  return (
-    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
-      <FlowButtons />
-
-      <div style={{ marginTop: 18, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
-        <div style={{ fontSize: 16, opacity: 0.9, marginBottom: 10 }}>
-          Right now, how calm do you feel?
-        </div>
-
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              style={{ ...buttonStyle, ...(calmness === n ? activeButtonStyle : {}) }}
-              onClick={() => setCalmness(n)}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-
-        <div style={{ marginTop: 12 }}>
-          <button
-            style={{ ...buttonStyle, opacity: calmness ? 1 : 0.5 }}
-            disabled={!calmness}
-            onClick={async () => {
-              await fetch("/api/calmness", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId, userId, flow: "daily", calmness }),
-              });
-
-              setShowCalmness(false);
-              setCalmness(null);
-              setFinished(true);
-            }}
-          >
-            Continue
-          </button>
-        </div>
-      </div>
-    </main>
-  );
-}
-
 
 
 if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
