@@ -142,7 +142,7 @@ useEffect(() => {
 
  if (showWeekly && userId) {
   setWeeklyLoading(true);
-  fetch(`/api/weekly?userId=${userId}`)
+fetch(`/api/weekly?userId=${userId}&force=true`)
     .then((r) => r.json())
     .then((d) => setWeeklyData(d))
     .finally(() => setWeeklyLoading(false));
