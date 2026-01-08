@@ -82,6 +82,14 @@ const [showWeekly, setShowWeekly] = useState(false);
     setUserId(getOrCreateUserId());
   }, []);
 
+useEffect(() => {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get("weekly") === "1") {
+    setShowWeekly(true);
+  }
+}, []);
+
+
   useEffect(() => {
     async function load() {
       setLoading(true);
