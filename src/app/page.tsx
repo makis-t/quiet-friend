@@ -626,8 +626,10 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
           Back
         </button>
         <button
-   onClick={async () => {
+onClick={async () => {
   const answer = answers[current.id];
+
+  // save only if user wrote something
   if (answer?.trim()) {
     await fetch("/api/session", {
       method: "POST",
@@ -641,19 +643,19 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
         answer,
       }),
     });
-
-if (isLast) {
-  if (flow === "daily") {
-    setFinished(false);
-    setShowCalmness(true);
-  } else {
-    setFinished(true);
   }
-} else {
-  setI((x) => x + 1);
-}
 
-
+  // move forward regardless
+  if (isLast) {
+    if (flow === "daily") {
+      setFinished(false);
+      setShowCalmness(true);
+    } else {
+      setFinished(true);
+    }
+  } else {
+    setI((x) => x + 1);
+  }
 }}
         >
           {isLast ? "Done" : "Continue"}
