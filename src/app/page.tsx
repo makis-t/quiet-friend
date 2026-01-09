@@ -52,6 +52,7 @@ export default function Home() {
   const [i, setI] = useState(0);
   const [loading, setLoading] = useState(true);
   const [flow, setFlow] = useState<"onboarding" | "daily">("onboarding");
+  const [reloadKey, setReloadKey] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [finished, setFinished] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -118,7 +119,7 @@ useEffect(() => {
   }
 
   load();
-}, [flow, userId]);
+}, [flow, userId, reloadKey]);
 
 
 async function loadHistory() {
@@ -284,6 +285,8 @@ setSoftBoundaryLoading(false);
     setShowInsights(false);
     resetUiState();
     setFlow("daily");
+setReloadKey((k) => k + 1);
+
   }}
 >
   Daily
