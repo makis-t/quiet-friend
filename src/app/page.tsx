@@ -341,6 +341,31 @@ setReloadKey((k) => k + 1);
     );
   }
 
+
+  if (showInsights) {
+    return (
+      <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+        <h1 style={{ marginBottom: 12 }}>Insights</h1>
+        <FlowButtons />
+        {insightsLoading || !insights ? (
+          <p>Loading…</p>
+        ) : (
+          <div style={{ lineHeight: 1.7 }}>
+            <p style={{ opacity: 0.8, marginBottom: 12 }}>
+              A quiet snapshot — no judgement, just visibility.
+            </p>
+            <div style={{ padding: 12, border: "1px solid #333", borderRadius: 10 }}>
+              <p style={{ margin: 0 }}>Total sessions: {insights.totalSessions}</p>
+              <p style={{ margin: 0 }}>Daily sessions: {insights.dailySessions}</p>
+              <p style={{ margin: 0 }}>Onboarding sessions: {insights.onboardingSessions}</p>
+              <p style={{ margin: 0 }}>Last 7 days: {insights.last7DaysSessions}</p>
+            </div>
+          </div>
+        )}
+      </main>
+    );
+  }
+
 if (showSoftBoundary) {
   return (
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
@@ -463,31 +488,6 @@ if (showCalmness) {
         >
           Continue
         </button>
-      </main>
-    );
-  }
-
-
-  if (showInsights) {
-    return (
-      <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-        <h1 style={{ marginBottom: 12 }}>Insights</h1>
-        <FlowButtons />
-        {insightsLoading || !insights ? (
-          <p>Loading…</p>
-        ) : (
-          <div style={{ lineHeight: 1.7 }}>
-            <p style={{ opacity: 0.8, marginBottom: 12 }}>
-              A quiet snapshot — no judgement, just visibility.
-            </p>
-            <div style={{ padding: 12, border: "1px solid #333", borderRadius: 10 }}>
-              <p style={{ margin: 0 }}>Total sessions: {insights.totalSessions}</p>
-              <p style={{ margin: 0 }}>Daily sessions: {insights.dailySessions}</p>
-              <p style={{ margin: 0 }}>Onboarding sessions: {insights.onboardingSessions}</p>
-              <p style={{ margin: 0 }}>Last 7 days: {insights.last7DaysSessions}</p>
-            </div>
-          </div>
-        )}
       </main>
     );
   }
