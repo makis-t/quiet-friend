@@ -456,17 +456,26 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
   </div>
 )}
          
- {answered.map(({ item, answer }) => (
-  <div key={item.id} style={{ marginBottom: 14 }}>
-  
-    <div style={{ fontSize: 15, opacity: 0.9, marginBottom: 4 }}>
-      {item.title}
+{answered.map(({ item, answer }, idx) => {
+  let displayTitle = item.title;
+
+  if (flow === "daily") {
+    if (idx === 0) displayTitle = "What was present today:";
+    if (idx === 1) displayTitle = "What felt supportive:";
+  }
+
+  return (
+    <div key={item.id} style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 15, opacity: 0.9, marginBottom: 4 }}>
+        {displayTitle}
+      </div>
+      <div style={{ whiteSpace: "pre-wrap", opacity: 0.95 }}>
+        {answer}
+      </div>
     </div>
-    <div style={{ whiteSpace: "pre-wrap", opacity: 0.95 }}>
-      {answer}
-    </div>
-  </div>
-))}
+  );
+})}
+
           </div>
         )}
 
