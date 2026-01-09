@@ -84,11 +84,15 @@ const [showWeekly, setShowWeekly] = useState(false);
 
   useEffect(() => {
     setUserId(getOrCreateUserId());
+
   }, []);
 
 
 useEffect(() => {
   async function load() {
+    setLoading(true);
+    setItems([]); // ✅ clear previous flow items to avoid mixed UI
+
     if (flow === "daily" && userId) {
       setSoftBoundaryLoading(true);
       const resCheck = await fetch(`/api/insights?userId=${userId}`);
@@ -107,7 +111,6 @@ useEffect(() => {
       setSoftBoundaryLoading(false);
     }
 
-    setLoading(true);
     const res = await fetch(`/api/${flow}`);
     const data = await res.json();
     setItems(data.items ?? []);
@@ -116,6 +119,7 @@ useEffect(() => {
 
   load();
 }, [flow, userId]);
+
 
 async function loadHistory() {
   if (!userId) return;
