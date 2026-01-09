@@ -52,6 +52,7 @@ export default function Home() {
   const [i, setI] = useState(0);
   const [loading, setLoading] = useState(true);
   const [flow, setFlow] = useState<"onboarding" | "daily">("onboarding");
+const [itemsFlow, setItemsFlow] = useState<"onboarding" | "daily">("onboarding");
   const [reloadKey, setReloadKey] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [finished, setFinished] = useState(false);
@@ -113,6 +114,7 @@ useEffect(() => {
     const res = await fetch(`/api/${flow}`);
     const data = await res.json();
     setItems(data.items ?? []);
+setItemsFlow(flow);
   }
 
   load();
@@ -490,7 +492,9 @@ if (showCalmness) {
   }
 
 
-if (items.length === 0) return <main style={{ padding: 24 }}>Loading…</main>;
+if (items.length === 0 || itemsFlow !== flow) {
+  return <main style={{ padding: 24, opacity: 0.6 }}>Just a moment…</main>;
+}
 
 
   if (finished) {
