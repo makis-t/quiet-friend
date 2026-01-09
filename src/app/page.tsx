@@ -277,23 +277,19 @@ setSoftBoundaryLoading(false);
 </button>
 
 
-<button
+     <button
   style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
   onClick={() => {
     setShowHistory(false);
     setShowInsights(false);
+    resetUiState();
+    setFlow("daily");
+setReloadKey((k) => k + 1);
 
-    // ✅ κάνε reset + switch μόνο αν όντως αλλάζεις flow
-    if (flow !== "daily") {
-      resetUiState();
-      setFlow("daily");
-      setReloadKey((k) => k + 1);
-    }
   }}
 >
   Daily
 </button>
-
 
 
       <button
@@ -491,20 +487,50 @@ if (showCalmness) {
         >
           Continue
         </button>
+
       </main>
     );
   }
 
 
-if (items.length === 0 || itemsFlow !== flow) {
-  return (
-    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
-      <FlowButtons />
-      <p style={{ opacity: 0.7, marginTop: 12 }}>Just a moment…</p>
-    </main>
-  );
-}
+<button
+  style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
+  onClick={async () => {
+    setShowHistory(false);
+    setShowInsights(false);
+
+    if (flow === "daily") return;
+
+    resetUiState();
+
+    if (userId) {
+      setSoftBoundaryLoading(true);
+      const resCheck = await fetch(`/api/insights?userId=${userId}`);
+      const dataCheck = await resCheck.json();
+
+      const today = new Date().toISOString().slice(0, 10);
+      const lastDailyDate = dataCheck?.lastDailyDate;
+
+      if (lastDailyDate === today) {
+        setSoftBoundaryLoading(false);
+        setFlow("daily");
+        setShowSoftBoundary(true);
+        return;
+      }
+
+      setSoftBoundaryLoading(false);
+    }
+
+    const res = await fetch(`/api/daily`);
+    const data = await res.json();
+    setItems(data.items ?? []);
+
+    setFlow("daily");
+  }}
+>
+  Daily
+</button>
+
 
 
 
