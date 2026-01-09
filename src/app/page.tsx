@@ -260,31 +260,31 @@ setSoftBoundaryLoading(false);
 
   const FlowButtons = () => (
     <div style={{ marginBottom: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
-      <button
-            style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "onboarding" ? activeButtonStyle : {}) }}
+     <button
+  style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "onboarding" ? activeButtonStyle : {}) }}
+  onClick={() => {
+    setShowHistory(false);
+    setShowInsights(false);
+    resetUiState();
+    setFlow("onboarding");
+  }}
+>
+  Onboarding
+</button>
 
-        onClick={() => {
-          setShowHistory(false);
-          setShowInsights(false);
-          setFlow("onboarding");
-          resetUiState();
-        }}
-      >
-        Onboarding
-      </button>
 
-      <button
-             style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
+     <button
+  style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
+  onClick={() => {
+    setShowHistory(false);
+    setShowInsights(false);
+    resetUiState();
+    setFlow("daily");
+  }}
+>
+  Daily
+</button>
 
-        onClick={() => {
-          setShowHistory(false);
-          setShowInsights(false);
-          setFlow("daily");
-          resetUiState();
-        }}
-      >
-        Daily
-      </button>
 
       <button
            style={{ ...buttonStyle, ...(showHistory ? activeButtonStyle : {}) }}
