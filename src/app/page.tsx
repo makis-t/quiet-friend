@@ -452,9 +452,7 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
           <div style={{ padding: 12, border: "1px solid #333", borderRadius: 10 }}>
           {answered.map(({ item, answer }) => (
   <div key={item.id} style={{ marginBottom: 14 }}>
-    <div style={{ fontSize: 13, opacity: 0.6, marginBottom: 2 }}>
-      A quiet note:
-    </div>
+  
     <div style={{ fontSize: 15, opacity: 0.9, marginBottom: 4 }}>
       {item.title}
     </div>
