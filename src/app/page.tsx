@@ -69,6 +69,9 @@ export default function Home() {
 const [dailyCount, setDailyCount] = useState<number | null>(null);
 const [showCalmness, setShowCalmness] = useState(false);
 const [calmness, setCalmness] = useState<number | null>(null);
+const [showSoftBoundary, setShowSoftBoundary] = useState(false);
+const [softBoundaryLoading, setSoftBoundaryLoading] = useState(false);
+
 
 const [weeklyData, setWeeklyData] = useState<any>(null);
 const [weeklyLoading, setWeeklyLoading] = useState(false);
@@ -183,6 +186,8 @@ setDailyCount(null);
 
   setShowCalmness(false);
   setCalmness(null);
+setShowSoftBoundary(false);
+setSoftBoundaryLoading(false);
   setWeeklyData(null);
   setWeeklyLoading(false);
   }
@@ -309,6 +314,34 @@ setDailyCount(null);
       </main>
     );
   }
+
+if (showSoftBoundary) {
+  return (
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
+      <FlowButtons />
+
+      <div style={{ marginTop: 18, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
+        <p style={{ fontSize: 15, opacity: 0.85, lineHeight: 1.6 }}>
+          That’s enough for today.
+        </p>
+        <p style={{ fontSize: 14, opacity: 0.7 }}>
+          We’ll gently continue tomorrow.
+        </p>
+
+        <button
+          style={{ marginTop: 14 }}
+          onClick={() => {
+            setShowSoftBoundary(false);
+            resetUiState();
+          }}
+        >
+          Close
+        </button>
+      </div>
+    </main>
+  );
+}
 
 if (showCalmness) {
   return (
@@ -612,7 +645,22 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
 
   if (isLast) {
   if (flow === "daily") {
-    setFinished(false);        // 👈 πρόσθεσέ το
+    setSoftBoundaryLoading(true);
+
+    const res = await fetch(`/api/insights?userId=${userId}`);
+    const data = await res.json();
+
+    const today = new Date().toLocaleDateString();
+    const lastDailyDate = data?.lastDailyDate;
+
+    if (lastDailyDate === today) {
+      setShowSoftBoundary(true);
+      setSoftBoundaryLoading(false);
+      return;
+    }
+
+    setSoftBoundaryLoading(false);
+    setFinished(false);
     setShowCalmness(true);
   } else {
     setFinished(true);

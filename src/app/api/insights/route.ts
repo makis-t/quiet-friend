@@ -42,6 +42,7 @@ export async function GET(req: Request) {
     let totalSessions = 0;
     let onboardingSessions = 0;
     let dailySessions = 0;
+let lastDailyDate: string | null = null;
 
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -62,21 +63,29 @@ export async function GET(req: Request) {
       const seconds = updatedAt?._seconds ?? updatedAt?.seconds ?? null;
       const dt = toDateFromSeconds(seconds || undefined);
 
-      if (dt) {
-        const dayKey = dt.toISOString().slice(0, 10);
-        dayBuckets[dayKey] = (dayBuckets[dayKey] || 0) + 1;
+   if (dt) {
+  const dayKey = dt.toISOString().slice(0, 10);
+  dayBuckets[dayKey] = (dayBuckets[dayKey] || 0) + 1;
 
-        if (dt >= sevenDaysAgo) last7DaysSessions += 1;
-      }
+  if (dt >= sevenDaysAgo) last7DaysSessions += 1;
+
+  // last daily session date (most recent daily only)
+  if (flow === "daily" && lastDailyDate === null) {
+    lastDailyDate = dayKey;
+  }
+}
+
     });
 
-    return NextResponse.json({
-      totalSessions,
-      onboardingSessions,
-      dailySessions,
-      last7DaysSessions,
-      dayBuckets,
-    });
+return NextResponse.json({
+  totalSessions,
+  onboardingSessions,
+  dailySessions,
+  last7DaysSessions,
+  lastDailyDate,
+  dayBuckets,
+});
+
   } catch (e: any) {
     return NextResponse.json(
       { error: "Failed to load insights", details: e?.message || String(e) },
