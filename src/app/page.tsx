@@ -91,7 +91,6 @@ const [showWeekly, setShowWeekly] = useState(false);
 
 useEffect(() => {
   async function load() {
-    setLoading(true);
 
     if (flow === "daily" && userId) {
       setSoftBoundaryLoading(true);
@@ -114,7 +113,6 @@ useEffect(() => {
     const res = await fetch(`/api/${flow}`);
     const data = await res.json();
     setItems(data.items ?? []);
-    setLoading(false);
   }
 
   load();
@@ -492,8 +490,7 @@ if (showCalmness) {
   }
 
 
-if (loading || items.length === 0) return <main style={{ padding: 24 }}>Loading…</main>;
-
+if (items.length === 0) return <main style={{ padding: 24 }}>Loading…</main>;
 
 
   if (finished) {
