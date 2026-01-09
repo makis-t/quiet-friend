@@ -641,25 +641,9 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
         answer,
       }),
     });
-  }
 
-  if (isLast) {
+if (isLast) {
   if (flow === "daily") {
-    setSoftBoundaryLoading(true);
-
-    const res = await fetch(`/api/insights?userId=${userId}`);
-    const data = await res.json();
-
-    const today = new Date().toISOString().slice(0, 10);
-    const lastDailyDate = data?.lastDailyDate;
-
-    if (lastDailyDate === today) {
-      setShowSoftBoundary(true);
-      setSoftBoundaryLoading(false);
-      return;
-    }
-
-    setSoftBoundaryLoading(false);
     setFinished(false);
     setShowCalmness(true);
   } else {
@@ -668,6 +652,7 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
 } else {
   setI((x) => x + 1);
 }
+
 
 }}
         >
