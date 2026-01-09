@@ -490,7 +490,8 @@ if (showCalmness) {
   }
 
 
-if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
+if (loading || items.length === 0) return <main style={{ padding: 24 }}>Loading…</main>;
+
 
 
   if (finished) {
