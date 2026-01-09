@@ -92,7 +92,6 @@ const [showWeekly, setShowWeekly] = useState(false);
 useEffect(() => {
   async function load() {
     setLoading(true);
-    setItems([]); // ✅ clear previous flow items to avoid mixed UI
 
     if (flow === "daily" && userId) {
       setSoftBoundaryLoading(true);
