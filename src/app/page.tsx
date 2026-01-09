@@ -493,8 +493,15 @@ if (showCalmness) {
 
 
 if (items.length === 0 || itemsFlow !== flow) {
-  return <main style={{ padding: 24, opacity: 0.6 }}>Just a moment…</main>;
+  return (
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
+      <FlowButtons />
+      <p style={{ opacity: 0.7, marginTop: 12 }}>Just a moment…</p>
+    </main>
+  );
 }
+
 
 
   if (finished) {
