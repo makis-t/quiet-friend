@@ -87,16 +87,35 @@ const [showWeekly, setShowWeekly] = useState(false);
   }, []);
 
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const res = await fetch(`/api/${flow}`);
-      const data = await res.json();
-      setItems(data.items ?? []);
-      setLoading(false);
+useEffect(() => {
+  async function load() {
+    if (flow === "daily" && userId) {
+      setSoftBoundaryLoading(true);
+      const resCheck = await fetch(`/api/insights?userId=${userId}`);
+      const dataCheck = await resCheck.json();
+
+      const today = new Date().toISOString().slice(0, 10);
+      const lastDailyDate = dataCheck?.lastDailyDate;
+
+      if (lastDailyDate === today) {
+        setShowSoftBoundary(true);
+        setSoftBoundaryLoading(false);
+        setLoading(false);
+        return;
+      }
+
+      setSoftBoundaryLoading(false);
     }
-    load();
-  }, [flow]);
+
+    setLoading(true);
+    const res = await fetch(`/api/${flow}`);
+    const data = await res.json();
+    setItems(data.items ?? []);
+    setLoading(false);
+  }
+
+  load();
+}, [flow, userId]);
 
 async function loadHistory() {
   if (!userId) return;
