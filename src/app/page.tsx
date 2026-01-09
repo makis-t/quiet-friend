@@ -82,13 +82,6 @@ const [showWeekly, setShowWeekly] = useState(false);
     setUserId(getOrCreateUserId());
   }, []);
 
-useEffect(() => {
-  const p = new URLSearchParams(window.location.search);
-  if (p.get("weekly") === "1") {
-    setShowWeekly(true);
-  }
-}, []);
-
 
   useEffect(() => {
     async function load() {
@@ -115,7 +108,7 @@ async function loadHistory() {
     if (oldest.updatedAt?._seconds) {
       const firstDate = new Date(oldest.updatedAt._seconds * 1000);
       const days = (Date.now() - firstDate.getTime()) / (1000 * 60 * 60 * 24);
-    if (days >= 7 || new URLSearchParams(window.location.search).get("weekly") === "1") {
+  if (days >= 7) {
   setShowWeekly(true);
 }
 

@@ -40,12 +40,14 @@ export async function GET(req: Request) {
     const fourteenDaysAgo = new Date(now - msDays(14));
 
     // 1) calmness από sessionSummaries (daily) τελευταίες 14 μέρες
-    const summariesSnap = await db
-      .collection("sessionSummaries")
-      .where("userId", "==", userId)
-      .where("flow", "==", "daily")
-      .orderBy("updatedAt", "desc")
-      .get();
+const summariesSnap = await db
+  .collection("sessionSummaries")
+  .where("userId", "==", userId)
+  .where("flow", "==", "daily")
+  .where("updatedAt", ">=", fourteenDaysAgo)
+  .orderBy("updatedAt", "desc")
+  .get();
+
 
     const calmThis: number[] = [];
     const calmPrev: number[] = [];
@@ -56,9 +58,13 @@ export async function GET(req: Request) {
       if (!Number.isFinite(c)) return;
 
       const updatedAt = data.updatedAt;
-      const seconds = updatedAt?._seconds ?? updatedAt?.seconds ?? null;
-      if (!seconds) return;
-      const dt = new Date(seconds * 1000);
+const dt =
+  updatedAt?.toDate?.() ??
+  (updatedAt?._seconds || updatedAt?.seconds
+    ? new Date((updatedAt._seconds ?? updatedAt.seconds) * 1000)
+    : null);
+if (!dt) return;
+
 
       if (dt >= sevenDaysAgo) calmThis.push(c);
       else if (dt >= fourteenDaysAgo) calmPrev.push(c);
@@ -86,10 +92,14 @@ export async function GET(req: Request) {
       const answer = String(data.answer || "").trim();
       if (!answer) return;
 
-      const createdAt = data.createdAt;
-      const seconds = createdAt?._seconds ?? createdAt?.seconds ?? null;
-      if (!seconds) return;
-      const dt = new Date(seconds * 1000);
+     const createdAt = data.createdAt;
+const dt =
+  createdAt?.toDate?.() ??
+  (createdAt?._seconds || createdAt?.seconds
+    ? new Date((createdAt._seconds ?? createdAt.seconds) * 1000)
+    : null);
+if (!dt) return;
+
 
       if (dt >= sevenDaysAgo) textsThis.push(answer);
       else textsPrev.push(answer);
