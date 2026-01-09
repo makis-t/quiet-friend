@@ -277,19 +277,23 @@ setSoftBoundaryLoading(false);
 </button>
 
 
-     <button
+<button
   style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
   onClick={() => {
     setShowHistory(false);
     setShowInsights(false);
-    resetUiState();
-    setFlow("daily");
-setReloadKey((k) => k + 1);
 
+    // ✅ κάνε reset + switch μόνο αν όντως αλλάζεις flow
+    if (flow !== "daily") {
+      resetUiState();
+      setFlow("daily");
+      setReloadKey((k) => k + 1);
+    }
   }}
 >
   Daily
 </button>
+
 
 
       <button
