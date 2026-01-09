@@ -7,6 +7,7 @@ type ContentItem = {
   title?: string;
   step?: number;
   content?: string;
+  hint?: string;
   flow?: string;
   active?: boolean;
 };
