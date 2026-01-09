@@ -650,7 +650,7 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
     const res = await fetch(`/api/insights?userId=${userId}`);
     const data = await res.json();
 
-    const today = new Date().toLocaleDateString();
+    const today = new Date().toISOString().slice(0, 10);
     const lastDailyDate = data?.lastDailyDate;
 
     if (lastDailyDate === today) {
