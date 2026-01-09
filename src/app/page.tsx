@@ -540,14 +540,20 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
   </>
 )}
 
-              <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, lineHeight: 1.2 }}>
-          {current.title}
-        </div>
-        <div style={{ fontSize: 18, lineHeight: 1.5, opacity: 0.9 }}>
-          {current.content}
-        </div>
-      </div>
+        <div style={{ marginBottom: 14 }}>
+  <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, lineHeight: 1.2 }}>
+    {current.title}
+  </div>
+  <div style={{ fontSize: 18, lineHeight: 1.5, opacity: 0.9 }}>
+    {current.content}
+  </div>
+  {current.hint && (
+    <div style={{ fontSize: 13, lineHeight: 1.4, opacity: 0.65, marginTop: 10 }}>
+      {current.hint}
+    </div>
+  )}
+</div>
+
 
         <textarea
         ref={textareaRef}
