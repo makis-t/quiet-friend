@@ -450,7 +450,13 @@ if (loading) return <main style={{ padding: 24 }}>Loading…</main>;
 
         {answered.length > 0 && (
           <div style={{ padding: 12, border: "1px solid #333", borderRadius: 10 }}>
-          {answered.map(({ item, answer }) => (
+{flow === "daily" && (
+  <div style={{ fontSize: 13, opacity: 0.75, marginBottom: 10 }}>
+    A small reflection from today.
+  </div>
+)}
+         
+ {answered.map(({ item, answer }) => (
   <div key={item.id} style={{ marginBottom: 14 }}>
   
     <div style={{ fontSize: 15, opacity: 0.9, marginBottom: 4 }}>
