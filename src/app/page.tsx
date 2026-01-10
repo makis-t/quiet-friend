@@ -276,7 +276,6 @@ setSoftBoundaryLoading(false);
   Onboarding
 </button>
 
-
 <button
   style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
   onClick={() => {
@@ -292,8 +291,6 @@ setSoftBoundaryLoading(false);
 >
   Daily
 </button>
-
-
 
       <button
            style={{ ...buttonStyle, ...(showHistory ? activeButtonStyle : {}) }}
@@ -494,47 +491,6 @@ if (showCalmness) {
       </main>
     );
   }
-
-
-<button
-  style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
-  onClick={async () => {
-    setShowHistory(false);
-    setShowInsights(false);
-
-    if (flow === "daily") return;
-
-    resetUiState();
-
-    if (userId) {
-      setSoftBoundaryLoading(true);
-      const resCheck = await fetch(`/api/insights?userId=${userId}`);
-      const dataCheck = await resCheck.json();
-
-      const today = new Date().toISOString().slice(0, 10);
-      const lastDailyDate = dataCheck?.lastDailyDate;
-
-      if (lastDailyDate === today) {
-        setSoftBoundaryLoading(false);
-        setFlow("daily");
-        setShowSoftBoundary(true);
-        return;
-      }
-
-      setSoftBoundaryLoading(false);
-    }
-
-    const res = await fetch(`/api/daily`);
-    const data = await res.json();
-    setItems(data.items ?? []);
-
-    setFlow("daily");
-  }}
->
-  Daily
-</button>
-
-
 
 
   if (finished) {
