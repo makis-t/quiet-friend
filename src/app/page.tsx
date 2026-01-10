@@ -262,57 +262,65 @@ setSoftBoundaryLoading(false);
     opacity: 1,
   };
 
-  const FlowButtons = () => (
-    <div style={{ marginBottom: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
-     <button
-  style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "onboarding" ? activeButtonStyle : {}) }}
-  onClick={() => {
-    setShowHistory(false);
-    setShowInsights(false);
-    resetUiState();
-    setFlow("onboarding");
-  }}
->
-  Onboarding
-</button>
+const FlowButtons = () => (
+  <div style={{ marginBottom: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
+    <button
+      style={{
+        ...buttonStyle,
+        ...(!showHistory && !showInsights && flow === "onboarding" ? activeButtonStyle : {}),
+      }}
+      onClick={() => {
+        setShowHistory(false);
+        setShowInsights(false);
+        if (flow !== "onboarding") {
+          resetUiState();
+          setFlow("onboarding");
+        }
+      }}
+    >
+      Onboarding
+    </button>
 
-<button
-  style={{ ...buttonStyle, ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}) }}
-  onClick={() => {
-    setShowHistory(false);
-    setShowInsights(false);
+    <button
+      style={{
+        ...buttonStyle,
+        ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}),
+      }}
+      onClick={() => {
+        setShowHistory(false);
+        setShowInsights(false);
+        if (flow !== "daily") {
+          resetUiState();
+          setFlow("daily");
+          setReloadKey((k) => k + 1);
+        }
+      }}
+    >
+      Daily
+    </button>
 
-    if (flow !== "daily") {
-      resetUiState();
-      setFlow("daily");
-      setReloadKey((k) => k + 1);
-    }
-  }}
->
-  Daily
-</button>
+    <button
+      style={{ ...buttonStyle, ...(showHistory ? activeButtonStyle : {}) }}
+      onClick={() => {
+        setShowHistory((x) => !x);
+        setShowInsights(false);
+      }}
+    >
+      History
+    </button>
 
-      <button
-           style={{ ...buttonStyle, ...(showHistory ? activeButtonStyle : {}) }}
-        onClick={() => {
-          setShowHistory((x) => !x);
-          setShowInsights(false);
-        }}
-      >
-        History
-      </button>
+    <button
+      style={{ ...buttonStyle, ...(showInsights ? activeButtonStyle : {}) }}
+      onClick={() => {
+        setShowInsights((x) => !x);
+        setShowHistory(false);
+      }}
+    >
+      Insights
+    </button>
+  </div>
+);
 
-      <button
-           style={{ ...buttonStyle, ...(showInsights ? activeButtonStyle : {}) }}
-        onClick={() => {
-          setShowInsights((x) => !x);
-          setShowHistory(false);
-        }}
-      >
-        Insights
-      </button>
-    </div>
-  );
 
   if (showHistory) {
     return (
