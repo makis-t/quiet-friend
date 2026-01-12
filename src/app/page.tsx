@@ -637,8 +637,11 @@ if (!current) {
 
   return (
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-          <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
-      <FlowButtons />
+         <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>
+  {flow === "daily" ? "Daily" : "Onboarding"}
+</div>
+<FlowButtons />
       {/* Progress indicator */}
       <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
         {items.length ? `${i + 1}/${items.length}` : ""}
