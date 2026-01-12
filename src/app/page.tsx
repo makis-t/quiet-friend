@@ -606,6 +606,18 @@ if (showCalmness) {
 )}
     <p style={{ margin: 0 }}>{DAILY_CLOSING_END}</p>
     <p style={{ margin: 0 }}>{DAILY_CLOSING_CONTINUITY}</p>
+{showSupport && (
+  <div style={{ marginTop: 14, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
+    <p style={{ margin: 0, fontSize: 14, opacity: 0.85 }}>
+      Quiet Friend is free to use.
+      <br />
+      If this space has been meaningful to you, you can support it and go deeper.
+    </p>
+    <button style={{ marginTop: 10 }}>
+      Support Quiet Friend
+    </button>
+  </div>
+)}
 
     {calmness !== null && (
       <p style={{ marginTop: 6, opacity: 0.75 }}>
