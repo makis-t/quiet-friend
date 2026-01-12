@@ -347,7 +347,7 @@ const FlowButtons = () => (
 <h1 style={{ marginBottom: 12 }}>History</h1>
         <FlowButtons />
         {historyLoading ? (
-          <p>Loading…</p>
+        <p style={{ opacity: 0.7 }}>Loading…</p>
         ) : historyItems.length === 0 ? (
           <p>No past sessions.</p>
         ) : (
@@ -374,7 +374,7 @@ const FlowButtons = () => (
         <h1 style={{ marginBottom: 12 }}>Insights</h1>
         <FlowButtons />
         {insightsLoading || !insights ? (
-          <p>Loading…</p>
+          <p style={{ opacity: 0.7 }}>Loading…</p>
         ) : (
           <div style={{ lineHeight: 1.7 }}>
             <p style={{ opacity: 0.8, marginBottom: 12 }}>
