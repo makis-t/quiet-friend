@@ -593,6 +593,20 @@ if (showCalmness) {
   }
 
   const current = items[i];
+const current = items[i];
+
+if (!current) {
+  return (
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
+      <FlowButtons />
+      <p style={{ opacity: 0.7, marginTop: 12 }}>Loading…</p>
+    </main>
+  );
+}
+
+const isLast = i >= items.length - 1;
+
   const isLast = i >= items.length - 1;
 
   return (
