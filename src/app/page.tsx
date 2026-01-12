@@ -645,24 +645,26 @@ if (!current) {
 </div>
 
 <FlowButtons />
-      {/* Progress indicator */}
+{/* Top meta (fixed height to avoid layout jump) */}
+<div style={{ minHeight: 54 }}>
+  <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
+    {items.length ? `${i + 1}/${items.length}` : ""}
+  </div>
+
+  {i === 0 && (
+    <>
       <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
-        {items.length ? `${i + 1}/${items.length}` : ""}
+        {itemsFlow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
       </div>
 
-   {i === 0 && (
-  <>
-    <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 6 }}>
-      {flow === "daily" ? `Today — ${new Date().toLocaleDateString()}` : "Welcome"}
-    </div>
-
-    {flow === "daily" && typeof dailyCount === "number" && (
-      <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 10 }}>
-        You’ve shown up {dailyCount} times.
-      </div>
-    )}
-  </>
-)}
+      {itemsFlow === "daily" && typeof dailyCount === "number" && (
+        <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 10 }}>
+          You’ve shown up {dailyCount} times.
+        </div>
+      )}
+    </>
+  )}
+</div>
 
         <div style={{ marginBottom: 14 }}>
   <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, lineHeight: 1.2 }}>
