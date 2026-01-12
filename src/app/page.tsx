@@ -593,7 +593,6 @@ if (showCalmness) {
   }
 
   const current = items[i];
-const current = items[i];
 
 if (!current) {
   return (
@@ -604,8 +603,6 @@ if (!current) {
     </main>
   );
 }
-
-const isLast = i >= items.length - 1;
 
   const isLast = i >= items.length - 1;
 
