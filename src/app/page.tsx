@@ -58,7 +58,11 @@ const [itemsFlow, setItemsFlow] = useState<"onboarding" | "daily">("onboarding")
   const [finished, setFinished] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
-  const [userId, setUserId] = useState<string | null>(null);
+ const [userId, setUserId] = useState<string | null>(() => {
+  if (typeof window === "undefined") return null;
+  return getOrCreateUserId();
+});
+
 
   const [deleteNotice, setDeleteNotice] = useState<string | null>(null);
   const [deletePending, setDeletePending] = useState(false);
