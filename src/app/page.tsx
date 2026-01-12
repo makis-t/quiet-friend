@@ -249,7 +249,7 @@ setSoftBoundaryLoading(false);
 
     setAnswers({});
     setFinished(true);
-    setDeleteNotice("Your data has been deleted.");
+    setDeleteNotice("Done. Data has been removed.");
   } finally {
     setDeletePending(false);
   }
