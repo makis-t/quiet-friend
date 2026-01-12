@@ -84,8 +84,7 @@ const [weeklyLoading, setWeeklyLoading] = useState(false);
   const [insightsLoading, setInsightsLoading] = useState(false);
   const [insights, setInsights] = useState<Insights | null>(null);
 const [showWeekly, setShowWeekly] = useState(false);
-
-
+const [showWelcomeBack, setShowWelcomeBack] = useState(false);
 
  useEffect(() => {
   async function load() {
@@ -97,25 +96,33 @@ const [showWeekly, setShowWeekly] = useState(false);
     setSoftBoundaryLoading(false);
 
     // 1) Soft-boundary check ONLY for daily
-    if (flow === "daily") {
-      setSoftBoundaryLoading(true);
+   if (flow === "daily") {
+  setSoftBoundaryLoading(true);
 
-      const resCheck = await fetch(`/api/insights?userId=${userId}`);
-      const dataCheck = await resCheck.json();
+  const resCheck = await fetch(`/api/insights?userId=${userId}`);
+  const dataCheck = await resCheck.json();
 
-      const today = new Date().toISOString().slice(0, 10);
-      const lastDailyDate = dataCheck?.lastDailyDate;
+  const today = new Date().toISOString().slice(0, 10);
+  const lastDailyDate = dataCheck?.lastDailyDate;
 
-      if (lastDailyDate === today) {
-        setShowSoftBoundary(true);
-        setSoftBoundaryLoading(false);
-        setItemsFlow("daily");
-        setLoading(false);
-        return;
-      }
+  if (lastDailyDate === today) {
+    setShowSoftBoundary(true);
+    setSoftBoundaryLoading(false);
+    setItemsFlow("daily");
+    setLoading(false);
+    return;
+  }
 
-      setSoftBoundaryLoading(false);
+  if (lastDailyDate) {
+    const last = new Date(lastDailyDate);
+    const diffDays = (Date.now() - last.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays >= 3) {
+      setShowWelcomeBack(true);
     }
+  }
+
+  setSoftBoundaryLoading(false);
+}
 
     // 2) Load content items for current flow
     const res = await fetch(`/api/${flow}`);
@@ -626,6 +633,24 @@ if (showCalmness) {
   }
 
   const current = items[i];
+if (showWelcomeBack && itemsFlow === "daily") {
+  return (
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+      <div style={{ opacity: 0.7, marginBottom: 12 }}>Daily</div>
+      <FlowButtons />
+      <p style={{ marginTop: 20, fontSize: 16, opacity: 0.9 }}>
+        It’s been a few days. Welcome back.
+      </p>
+      <button
+        style={{ marginTop: 20 }}
+        onClick={() => setShowWelcomeBack(false)}
+      >
+        Continue
+      </button>
+    </main>
+  );
+}
 
 if (!current) {
   return (
