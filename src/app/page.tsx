@@ -191,12 +191,16 @@ useEffect(() => {
   setWeeklyLoading(true);
 fetch(`/api/weekly?userId=${userId}&force=true`)
     .then((r) => r.json())
-    .then((d) => {
+ .then((d) => {
   setWeeklyData(d);
+
   if (d?.shifted) {
     setMirrorHint("Something in how you write is shifting.");
+  } else if (d?.repeated) {
+    setMirrorHint("This shows up again.");
   }
 })
+
     .finally(() => setWeeklyLoading(false));
 }
 
