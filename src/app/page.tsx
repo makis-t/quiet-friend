@@ -32,8 +32,7 @@ type Insights = {
 
 const USER_KEY = "quietFriendUserId";
 const DAILY_CLOSING_END = "That’s enough for today.";
-const DAILY_CLOSING_CONTINUITY = "We’ll gently continue tomorrow.";
-
+const DAILY_CLOSING_CONTINUITY = "We can gently continue tomorrow.";
 
 function createNewUserId() {
   const id = crypto.randomUUID();
@@ -405,7 +404,7 @@ if (showSoftBoundary) {
           That’s enough for today.
         </p>
         <p style={{ fontSize: 14, opacity: 0.7 }}>
-          We’ll gently continue tomorrow.
+         We can gently continue tomorrow.
         </p>
 
         <button
