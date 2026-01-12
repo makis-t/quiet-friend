@@ -392,9 +392,10 @@ const FlowButtons = () => (
 
 if (showSoftBoundary) {
   return (
-    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
-      <FlowButtons />
+    <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>      
+<h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>Daily</div>
+<FlowButtons />
 
       <div style={{ marginTop: 18, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
         <p style={{ fontSize: 15, opacity: 0.85, lineHeight: 1.6 }}>
@@ -421,8 +422,9 @@ if (showSoftBoundary) {
 if (showCalmness) {
   return (
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
-      <FlowButtons />
+      <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>Daily</div>
+<FlowButtons />
 
       <div style={{ marginTop: 18, padding: 12, border: "1px solid #333", borderRadius: 10 }}>
         <div style={{ fontSize: 16, opacity: 0.9, marginBottom: 10 }}>
