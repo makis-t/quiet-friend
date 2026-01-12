@@ -292,21 +292,27 @@ const FlowButtons = () => (
       Onboarding
     </button>
 
-    <button
-      style={{
-        ...buttonStyle,
-        ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}),
-      }}
-      onClick={() => {
-        setShowHistory(false);
-        setShowInsights(false);
-        if (flow !== "daily") {
-          resetUiState();
-          setFlow("daily");
-          setReloadKey((k) => k + 1);
-        }
-      }}
-    >
+  <button
+  style={{
+    ...buttonStyle,
+    ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}),
+  }}
+  onClick={() => {
+    if (flow === "daily") return;
+
+    setShowHistory(false);
+    setShowInsights(false);
+
+    // pre-clear items so old flow doesn't flash
+    setItems([]);
+    setItemsFlow("daily");
+
+    resetUiState();
+    setFlow("daily");
+    setReloadKey((k) => k + 1);
+  }}
+>
+
       Daily
     </button>
 
