@@ -280,14 +280,17 @@ const FlowButtons = () => (
         ...buttonStyle,
         ...(!showHistory && !showInsights && flow === "onboarding" ? activeButtonStyle : {}),
       }}
-      onClick={() => {
-        setShowHistory(false);
-        setShowInsights(false);
-        if (flow !== "onboarding") {
-          resetUiState();
-          setFlow("onboarding");
-        }
-      }}
+  onClick={() => {
+  setShowHistory(false);
+  setShowInsights(false);
+
+  if (flow !== "onboarding") {
+    setItemsFlow("onboarding"); // update immediately for UI
+    resetUiState();
+    setFlow("onboarding");
+  }
+}}
+
     >
       Onboarding
     </button>
