@@ -196,9 +196,14 @@ fetch(`/api/weekly?userId=${userId}&force=true`)
 
   if (d?.shifted) {
     setMirrorHint("Something in how you write is shifting.");
-  } else if (d?.repeated) {
-    setMirrorHint("This shows up again.");
-  }
+} else if (d?.repeated) {
+  const hints = [
+    "This shows up again.",
+    "This feels related to something you wrote before.",
+  ];
+  const pick = hints[Math.floor(Math.random() * hints.length)];
+  setMirrorHint(pick);
+}
 })
 
     .finally(() => setWeeklyLoading(false));
