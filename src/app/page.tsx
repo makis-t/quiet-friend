@@ -84,17 +84,20 @@ const [showWeekly, setShowWeekly] = useState(false);
 
 
 
-  useEffect(() => {
-    setUserId(getOrCreateUserId());
-
-  }, []);
-
-
-useEffect(() => {
+ useEffect(() => {
   async function load() {
+    if (!userId) return;
 
-    if (flow === "daily" && userId) {
+    setLoading(true);
+
+    // reset daily-only overlays when switching flows
+    setShowSoftBoundary(false);
+    setSoftBoundaryLoading(false);
+
+    // 1) Soft-boundary check ONLY for daily
+    if (flow === "daily") {
       setSoftBoundaryLoading(true);
+
       const resCheck = await fetch(`/api/insights?userId=${userId}`);
       const dataCheck = await resCheck.json();
 
@@ -104,6 +107,7 @@ useEffect(() => {
       if (lastDailyDate === today) {
         setShowSoftBoundary(true);
         setSoftBoundaryLoading(false);
+        setItemsFlow("daily");
         setLoading(false);
         return;
       }
@@ -111,14 +115,18 @@ useEffect(() => {
       setSoftBoundaryLoading(false);
     }
 
+    // 2) Load content items for current flow
     const res = await fetch(`/api/${flow}`);
     const data = await res.json();
+
     setItems(data.items ?? []);
-setItemsFlow(flow);
+    setItemsFlow(flow);
+    setLoading(false);
   }
 
   load();
 }, [flow, userId, reloadKey]);
+
 
 
 async function loadHistory() {
@@ -595,11 +603,12 @@ if (showCalmness) {
   const current = items[i];
 
 if (!current) {
+  // Keep previous UI instead of flashing loading
   return (
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
       <h1 style={{ marginBottom: 12 }}>Quiet Friend</h1>
       <FlowButtons />
-      <p style={{ opacity: 0.7, marginTop: 12 }}>Loading…</p>
+      {/* no loading screen to avoid flash */}
     </main>
   );
 }
