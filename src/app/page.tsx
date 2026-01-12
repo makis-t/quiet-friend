@@ -344,7 +344,8 @@ const FlowButtons = () => (
   if (showHistory) {
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-<h1 style={{ marginBottom: 12 }}>History</h1>
+<h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>History</div>
         <FlowButtons />
         {historyItems.length === 0 ? (
   <p>{historyLoading ? "" : "No past sessions."}</p>
@@ -369,7 +370,8 @@ const FlowButtons = () => (
   if (showInsights) {
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-        <h1 style={{ marginBottom: 12 }}>Insights</h1>
+      <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>Insights</div>
         <FlowButtons />
       {insights ? (
   <div style={{ lineHeight: 1.7 }}>
@@ -471,7 +473,8 @@ if (showCalmness) {
   if (showWeekly) {
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-        <h1 style={{ marginBottom: 12 }}>Weekly Reflection</h1>
+       <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>Weekly Reflection</div>
         <FlowButtons />
         <p style={{ opacity: 0.85, lineHeight: 1.6 }}>
           This week, you wrote a little about what matters to you.
