@@ -26,6 +26,14 @@ function wordFromTexts(texts: string[]) {
   return sorted.length ? sorted[0][0] : null;
 }
 
+function firstWordFromText(text: string) {
+  const s = String(text || "").trim().toLowerCase();
+  if (!s) return null;
+  const w = s.split(/\s+/)[0] || "";
+  const cleaned = w.replace(/[^\p{L}\p{N}]+/gu, "");
+  return cleaned || null;
+}
+
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
@@ -110,10 +118,32 @@ if (!dt) return;
 
     const shifted = !!(wordThis && wordPrev && wordThis !== wordPrev);
 
+// repetition signal (simple): same first word appears at least 3 times in last 14 days answers
+let repeated = false;
+try {
+  const wordsAll: string[] = [];
+  sessionsSnap.docs.forEach((doc) => {
+    const data = doc.data() || {};
+    const answer = String(data.answer || "").trim();
+    const fw = firstWordFromText(answer);
+    if (fw) wordsAll.push(fw);
+  });
+
+  if (wordsAll.length >= 3) {
+    const counts = new Map<string, number>();
+    for (const w of wordsAll) counts.set(w, (counts.get(w) || 0) + 1);
+    const max = Math.max(...Array.from(counts.values()));
+    repeated = max >= 3;
+  }
+} catch {
+  repeated = false;
+}
+
     return NextResponse.json({
       calmThisAvg,
       calmPrevAvg,
       shifted,
+      repeated,
       // δεν χρειάζεται να δείξουμε τις λέξεις στο UI, αλλά τις στέλνουμε για debug αν θες
       wordThis,
       wordPrev,
