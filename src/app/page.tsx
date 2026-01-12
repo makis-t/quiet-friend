@@ -519,7 +519,7 @@ if (showCalmness) {
             resetUiState();
           }}
         >
-          Continue
+          Done
         </button>
 
       </main>
