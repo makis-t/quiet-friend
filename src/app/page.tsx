@@ -292,18 +292,20 @@ const FlowButtons = () => (
       Onboarding
     </button>
 
-  <button
+ <button
   style={{
     ...buttonStyle,
     ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}),
   }}
   onClick={() => {
-    if (flow === "daily") return;
-
+    // Always allow Daily to close History / Insights
     setShowHistory(false);
     setShowInsights(false);
 
-    // pre-clear items so old flow doesn't flash
+    // If already in daily, just close overlays
+    if (flow === "daily") return;
+
+    // Otherwise switch to daily cleanly
     setItems([]);
     setItemsFlow("daily");
 
@@ -312,6 +314,9 @@ const FlowButtons = () => (
     setReloadKey((k) => k + 1);
   }}
 >
+  Daily
+</button>
+
 
       Daily
     </button>
