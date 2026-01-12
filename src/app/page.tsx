@@ -558,10 +558,16 @@ if (showCalmness) {
           </div>
         )}
 
-  {flow === "daily" ? (
+{flow === "daily" ? (
   <div style={{ marginTop: 14, opacity: 0.85 }}>
     <p style={{ margin: 0 }}>{DAILY_CLOSING_END}</p>
     <p style={{ margin: 0 }}>{DAILY_CLOSING_CONTINUITY}</p>
+
+    {calmness !== null && (
+      <p style={{ marginTop: 6, opacity: 0.75 }}>
+        Calmness today: {calmness}/5
+      </p>
+    )}
   </div>
 ) : (
   <p style={{ marginTop: 14, opacity: 0.85 }}>We’ll keep this gently in mind.</p>
