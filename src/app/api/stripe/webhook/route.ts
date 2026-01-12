@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { db } from "@/lib/firebaseAdmin";
+import { adminDb as db } from "@/lib/firebaseAdmin";
 
 export const runtime = "nodejs";
 
