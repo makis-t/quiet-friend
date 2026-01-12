@@ -586,6 +586,11 @@ if (showCalmness) {
 
 {flow === "daily" ? (
   <div style={{ marginTop: 14, opacity: 0.85 }}>
+{mirrorHint && (
+  <p style={{ marginBottom: 6, opacity: 0.65, fontStyle: "italic" }}>
+    {mirrorHint}
+  </p>
+)}
     <p style={{ margin: 0 }}>{DAILY_CLOSING_END}</p>
     <p style={{ margin: 0 }}>{DAILY_CLOSING_CONTINUITY}</p>
 
