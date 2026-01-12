@@ -84,6 +84,7 @@ const [weeklyLoading, setWeeklyLoading] = useState(false);
   const [insightsLoading, setInsightsLoading] = useState(false);
   const [insights, setInsights] = useState<Insights | null>(null);
 const [showWeekly, setShowWeekly] = useState(false);
+const [mirrorHint, setMirrorHint] = useState<string | null>(null);
 const [showWelcomeBack, setShowWelcomeBack] = useState(false);
 
  useEffect(() => {
