@@ -1,13 +1,23 @@
 import "server-only";
-
 import admin from "firebase-admin";
-import { readFileSync } from "fs";
-import path from "path";
 
-const keyPath = path.join(process.cwd(), "firebase-admin-key.json");
+function getServiceAccount() {
+  const raw = process.env.FIREBASE_ADMIN_KEY;
+  if (!raw) throw new Error("Missing FIREBASE_ADMIN_KEY env var");
+
+  // Some platforms store it with escaped newlines; parse JSON safely.
+  const json = JSON.parse(raw);
+
+  // Fix private_key newlines if needed
+  if (json.private_key && typeof json.private_key === "string") {
+    json.private_key = json.private_key.replace(/\\n/g, "\n");
+  }
+
+  return json;
+}
 
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(readFileSync(keyPath, "utf8"));
+  const serviceAccount = getServiceAccount();
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
