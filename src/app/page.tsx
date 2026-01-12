@@ -292,7 +292,7 @@ const FlowButtons = () => (
       Onboarding
     </button>
 
- <button
+<button
   style={{
     ...buttonStyle,
     ...(!showHistory && !showInsights && flow === "daily" ? activeButtonStyle : {}),
@@ -317,9 +317,6 @@ const FlowButtons = () => (
   Daily
 </button>
 
-
-      Daily
-    </button>
 
     <button
       style={{ ...buttonStyle, ...(showHistory ? activeButtonStyle : {}) }}
