@@ -639,7 +639,7 @@ if (!current) {
     <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
          <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
 <div style={{ opacity: 0.7, marginBottom: 12 }}>
-  {flow === "daily" ? "Daily" : "Onboarding"}
+  {itemsFlow === "daily" ? "Daily" : "Onboarding"}
 </div>
 <FlowButtons />
       {/* Progress indicator */}
