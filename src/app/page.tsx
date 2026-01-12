@@ -179,6 +179,9 @@ async function loadDailyCount() {
   const data = await res.json();
   if (typeof data?.dailySessions === "number") {
     setDailyCount(data.dailySessions);
+    if (data.dailySessions >= 7) {
+      setShowSupport(true);
+    }
   }
 }
 
