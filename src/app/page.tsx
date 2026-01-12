@@ -86,7 +86,6 @@ const [showWeekly, setShowWeekly] = useState(false);
 
  useEffect(() => {
   async function load() {
-    if (!userId) return;
 
     setLoading(true);
 
