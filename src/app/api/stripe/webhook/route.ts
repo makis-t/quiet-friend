@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
             isPro,
             subscriptionStatus: status,
             stripeCustomerId: customerId,
-            currentPeriodEnd: new Date(sub.current_period_end * 1000),
+           currentPeriodEnd: new Date(((sub as any).current_period_end ?? 0) * 1000),
           },
           { merge: true }
         );
