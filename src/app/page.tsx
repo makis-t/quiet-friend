@@ -578,7 +578,7 @@ if (showCalmness) {
 
     {calmness !== null && (
       <p style={{ marginTop: 6, opacity: 0.75 }}>
-        Calmness today: {calmness}/5
+        Calmness today felt like: {calmness}/5
       </p>
     )}
   </div>
