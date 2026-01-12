@@ -221,6 +221,7 @@ fetch(`/api/weekly?userId=${userId}&force=true`)
     setI(0);
     setFinished(false);
     setAnswers({});
+setMirrorHint(null);
     setDeleteNotice(null);
   setShowWeekly(false);
 setDailyCount(null);
