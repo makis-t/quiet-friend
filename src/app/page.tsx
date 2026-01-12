@@ -440,21 +440,25 @@ if (showCalmness) {
         </div>
 
         <div style={{ marginTop: 12 }}>
-          <button
-            style={{ ...buttonStyle, opacity: calmness ? 1 : 0.5 }}
-            disabled={!calmness}
-            onClick={async () => {
-              await fetch("/api/calmness", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId, userId, flow: "daily", calmness }),
-              });
 
-              setShowCalmness(false);
-              setCalmness(null);
-              setFinished(true);
-            }}
-          >
+       <button
+  style={{ ...buttonStyle, opacity: calmness ? 1 : 0.5 }}
+  disabled={!calmness}
+  onClick={async () => {
+    const value = calmness;
+
+    await fetch("/api/calmness", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId, userId, flow: "daily", calmness: value }),
+    });
+
+    setShowCalmness(false);
+    setFinished(true);
+    // keep calmness for summary
+  }}
+>
+
             Continue
           </button>
         </div>
