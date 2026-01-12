@@ -86,6 +86,7 @@ const [weeklyLoading, setWeeklyLoading] = useState(false);
 const [showWeekly, setShowWeekly] = useState(false);
 const [mirrorHint, setMirrorHint] = useState<string | null>(null);
 const [showWelcomeBack, setShowWelcomeBack] = useState(false);
+const [showSupport, setShowSupport] = useState(false);
 
  useEffect(() => {
   async function load() {
