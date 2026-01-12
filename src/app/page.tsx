@@ -536,8 +536,9 @@ if (showCalmness) {
 
     return (
       <main style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-            <h1 style={{ marginBottom: 12 }}>Thank you 🤍</h1>
-        <FlowButtons />
+            <h1 style={{ marginBottom: 6 }}>Quiet Friend</h1>
+<div style={{ opacity: 0.7, marginBottom: 12 }}>Thank you 🤍</div>
+<FlowButtons />
 
         {answered.length > 0 && (
           <div style={{ padding: 12, border: "1px solid #333", borderRadius: 10 }}>
