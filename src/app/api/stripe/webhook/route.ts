@@ -38,15 +38,17 @@ export async function POST(req: NextRequest) {
 
       if (userId) {
         await db.collection("users").doc(userId).set(
-          {
-            isPro: true,
-            subscriptionStatus: "active",
-            stripeCustomerId: customerId,
-            stripeSubscriptionId: subscriptionId,
-            proSince: new Date(),
-          },
-          { merge: true }
-        );
+  {
+    isPro: true,
+    subscriptionStatus: "active",
+    stripeCustomerId: customerId,
+    stripeSubscriptionId: subscriptionId,
+    currentPeriodEnd: null,
+    proSince: new Date(),
+  },
+  { merge: true }
+);
+
       }
     }
 
