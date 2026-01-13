@@ -52,11 +52,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 2) Subscription updates -> keep status in sync
-    if (
-      event.type === "customer.subscription.updated" ||
-      event.type === "customer.subscription.deleted"
-    ) {
+  // 2) Subscription updates -> keep status in sync
+if (
+  event.type === "customer.subscription.created" ||
+  event.type === "customer.subscription.updated" ||
+  event.type === "customer.subscription.deleted"
+) {
       const sub = event.data.object as Stripe.Subscription;
 
       const status = sub.status; // active, canceled, past_due, etc.
