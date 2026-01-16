@@ -36,20 +36,27 @@ export async function POST(req: NextRequest) {
       const subscriptionId =
         typeof session.subscription === "string" ? session.subscription : null;
 
-      if (userId) {
-        await db.collection("users").doc(userId).set(
-  {
-    isPro: true,
-    subscriptionStatus: "active",
-    stripeCustomerId: customerId,
-    stripeSubscriptionId: subscriptionId,
-    currentPeriodEnd: null,
-    proSince: new Date(),
-  },
-  { merge: true }
-);
+if (userId) {
+  let currentPeriodEnd: Date | null = null;
 
-      }
+  if (subscriptionId) {
+    const sub = await stripe.subscriptions.retrieve(subscriptionId);
+    const endSec = (sub as any).current_period_end ?? null;
+    if (endSec) currentPeriodEnd = new Date(endSec * 1000);
+  }
+
+  await db.collection("users").doc(userId).set(
+    {
+      isPro: true,
+      subscriptionStatus: "active",
+      stripeCustomerId: customerId,
+      stripeSubscriptionId: subscriptionId,
+      currentPeriodEnd,
+      proSince: new Date(),
+    },
+    { merge: true }
+  );
+}
     }
 
   // 2) Subscription updates -> keep status in sync
